@@ -8,8 +8,6 @@
   /*Large devices*/
   @media (min-width: 1919px) {
   }
-  /*Extra large devices*/
-  @media (min-width: 1920px) { }
 </style>
 <template>
   <div class="">

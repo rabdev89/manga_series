@@ -1,14 +1,1 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[1],{
-
-/***/ "./resources/js/components/pages/home-page.vue":
-/*!*****************************************************!*\
-  !*** ./resources/js/components/pages/home-page.vue ***!
-  \*****************************************************/
-/*! exports provided: default */
-/***/ (function(module, exports) {
-
-throw new Error("Module build failed (from ./node_modules/vue-loader/lib/index.js):\nError: ENOENT: no such file or directory, open 'D:\\Projects\\Matt\\code\\Web & Mobile\\Sites\\Vue\\manga_series\\resources\\js\\components\\pages\\home-page.vue'");
-
-/***/ })
-
-}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[1],{22:function(t,n,a){"use strict";var e=a(4);a.n(e).a},23:function(t,n,a){(t.exports=a(5)(!1)).push([t.i,"\n.navbar-contain[data-v-4cfc600a] {\n  background-color:#0f2133;\n}\na[data-v-4cfc600a] {\n  color: grey;\n  text-decoration: none;\n}\n.menu-items a[data-v-4cfc600a] {\n  padding:0 15px;\n}\n/*Small devices*/\n@media (min-width: 600px) {\n.navbar-contain[data-v-4cfc600a] {\n    background-color:transparent;\n    padding: 15px;\n}\n}\n/*Medium devices*/\n@media (min-width: 1439px) {\n}\n/*Large devices*/\n@media (min-width: 1919px) {\n}\n/*Extra large devices*/\n@media (min-width: 1920px) {\n}\n",""])},4:function(t,n,a){var e=a(23);"string"==typeof e&&(e=[[t.i,e,""]]);var i={hmr:!0,transform:void 0,insertInto:void 0};a(6)(e,i);e.locals&&(t.exports=e.locals)},57:function(t,n,a){"use strict";a.r(n);var e={props:{},data:function(){return{}},computed:{},created:function(){},mounted:function(){},methods:{}},i=(a(22),a(2)),r=Object(i.a)(e,function(){var t=this,n=t.$createElement,a=t._self._c||n;return a("div",{staticClass:"navbar-contain"},[a("q-toolbar",{staticClass:"text-white justify-between"},[a("div",[a("q-avatar",[a("img",{attrs:{src:"/img/logo.png"}})])],1),t._v(" "),a("q-toolbar-title",[t._v("Manga Series")]),t._v(" "),a("div",{staticClass:"menu-items"},[a("a",{attrs:{href:"/"}},[t._v("MANGA LIST")]),t._v(" "),a("a",{attrs:{href:"/"}},[t._v("HOT MANGA")]),t._v(" "),a("a",{attrs:{href:"/"}},[t._v("LATEST RELEASES")]),t._v(" "),a("a",{attrs:{href:"/"}},[t._v("ADVANCED SEARCH")])]),t._v(" "),a("q-btn-dropdown",{staticClass:"lt-md",attrs:{flat:"",icon:"menu","menu-self":"top right","icon-right":"","content-style":{width:"100vw"}}},[a("q-list",[a("q-item",[a("q-item-section",[a("q-item-label",[a("a",{attrs:{href:"/"}},[t._v("MANGA LIST")])])],1)],1),t._v(" "),a("q-item",[a("q-item-section",[a("q-item-label",[a("a",{attrs:{href:"/"}},[t._v("HOT MANGA")])])],1)],1),t._v(" "),a("q-item",[a("q-item-section",[a("q-item-label",[a("a",{attrs:{href:"/"}},[t._v("LATEST RELEASES")])])],1)],1),t._v(" "),a("q-item",[a("q-item-section",[a("q-item-label",[a("a",{attrs:{href:"/"}},[t._v("ADVANCED SEARCH")])])],1)],1)],1)],1)],1)],1)},[],!1,null,"4cfc600a",null);n.default=r.exports}}]);

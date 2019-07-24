@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[0],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[4],{
 
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/layout/nav-bar.vue?vue&type=script&lang=js&":
 /*!*************************************************************************************************************************************************************************!*\
@@ -9,16 +9,6 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -105,7 +95,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.navbar-contain[data-v-daf8e8e2] {\n  background-color:#0f2133;\n}\na[data-v-daf8e8e2] {\n  color: grey;\n  text-decoration: none;\n}\n.menu-items a[data-v-daf8e8e2] {\n  padding:0 15px;\n}\n/*Small devices*/\n@media (min-width: 600px) {\n.navbar-contain[data-v-daf8e8e2] {\n    background-color:transparent;\n    padding: 15px;\n}\n}\n/*Medium devices*/\n@media (min-width: 1439px) {\n}\n/*Large devices*/\n@media (min-width: 1919px) {\n}\n/*Extra large devices*/\n@media (min-width: 1920px) {\n}\n", ""]);
+exports.push([module.i, "\n.navbar-contain[data-v-daf8e8e2] {\n  background-color:#0f2133;\n}\na[data-v-daf8e8e2] {\n  color: grey;\n  text-decoration: none;\n}\n/*Small devices*/\n@media (min-width: 600px) {\n.navbar-contain[data-v-daf8e8e2] {\n    background-color:transparent;\n}\n}\n/*Medium devices*/\n@media (min-width: 1439px) {\n}\n/*Large devices*/\n@media (min-width: 1919px) {\n}\n/*Extra large devices*/\n@media (min-width: 1920px) {\n}\n", ""]);
 
 // exports
 
@@ -159,34 +149,28 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "navbar-contain" },
+    { staticClass: "navbar-contain q-pa-sm q-gutter-y-sm" },
     [
       _c(
         "q-toolbar",
-        { staticClass: "text-white justify-between" },
+        { staticClass: "text-white" },
         [
           _c(
             "div",
+            { staticClass: "col-sm-2" },
             [_c("q-avatar", [_c("img", { attrs: { src: "/img/logo.png" } })])],
             1
           ),
           _vm._v(" "),
-          _c("q-toolbar-title", [_vm._v("Manga Series")]),
+          _c("div", { staticClass: "col-8" }),
           _vm._v(" "),
-          _c("div", { staticClass: "menu-items" }, [
-            _c("a", { attrs: { href: "/" } }, [_vm._v("MANGA LIST")]),
-            _vm._v(" "),
-            _c("a", { attrs: { href: "/" } }, [_vm._v("HOT MANGA")]),
-            _vm._v(" "),
-            _c("a", { attrs: { href: "/" } }, [_vm._v("LATEST RELEASES")]),
-            _vm._v(" "),
-            _c("a", { attrs: { href: "/" } }, [_vm._v("ADVANCED SEARCH")])
+          _c("q-toolbar-title", { staticClass: "col-2 gt-sm" }, [
+            _vm._v("Manga Series")
           ]),
           _vm._v(" "),
           _c(
             "q-btn-dropdown",
             {
-              staticClass: "lt-md",
               attrs: {
                 flat: "",
                 icon: "menu",
