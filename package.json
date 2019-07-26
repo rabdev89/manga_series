@@ -28,7 +28,9 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "intersection-observer": "^0.7.0",
         "quasar": "^1.0.5",
-        "vue-carousel": "^0.18.0"
+        "vue-carousel": "^0.18.0",
+        "vue-observe-visibility": "^0.4.4"
     }
 }

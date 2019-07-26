@@ -8,6 +8,10 @@
   }
   .menu-items a {
     padding:0 15px;
+    color:#dadada;
+  }
+  .homelink {
+    color:white;
   }
   /*Small devices*/
   @media (min-width: 600px) {
@@ -29,38 +33,40 @@
   <div class="navbar-contain">
     <q-toolbar class="text-white justify-between">
       <div>
-        <q-avatar>
-          <img src="/img/logo.png">
-        </q-avatar>
+        <a href="/" class="homelink">
+          <q-avatar>
+            <img src="/img/logo.png">
+          </q-avatar>
+        </a>
       </div>
-      <q-toolbar-title>Manga Series</q-toolbar-title>
-      <div class="menu-items">
-        <a href="/">MANGA LIST</a>
-        <a href="/">HOT MANGA</a>
-        <a href="/">LATEST RELEASES</a>
-        <a href="/">ADVANCED SEARCH</a>
+     <q-toolbar-title><a href="/" class="homelink">Manga Series</a></q-toolbar-title>
+      <div class="menu-items gt-sm">
+        <a href="/manga/categories/all">MANGA LIST</a>
+        <a href="/manga/hot">HOT MANGA</a>
+        <a href="/latest">LATEST RELEASES</a>
+        <a href="/search">ADVANCED SEARCH</a>
       </div>
       <!-- Hamburger Dropdown -->
       <q-btn-dropdown class="lt-md" flat icon="menu" menu-self="top right" icon-right :content-style="{width:'100vw'}">
         <q-list>
           <q-item>
             <q-item-section>
-              <q-item-label><a href="/">MANGA LIST</a></q-item-label>
+              <q-item-label><a href="/manga/categories/all">MANGA LIST</a></q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label><a href="/">HOT MANGA</a></q-item-label>
+              <q-item-label><a href="/manga/hot">HOT MANGA</a></q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label><a href="/">LATEST RELEASES</a></q-item-label>
+              <q-item-label><a href="/latest">LATEST RELEASES</a></q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label><a href="/">ADVANCED SEARCH</a></q-item-label>
+              <q-item-label><a href="/search">ADVANCED SEARCH</a></q-item-label>
             </q-item-section>
           </q-item>
         </q-list>

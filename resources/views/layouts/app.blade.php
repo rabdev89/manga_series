@@ -13,7 +13,7 @@
           background-color:#020d18;
           background-image: url('/img/background.jpg');
           background-repeat:no-repeat;
-          background-size:cover;
+          background-size: auto;
           min-height:100vh;
         }
         .container {
@@ -33,6 +33,7 @@
   <body>
     <div id="app">
       <nav-bar></nav-bar>
+      <search-bar></search-bar>
       <div class="container">
         @yield('content')
       </div>

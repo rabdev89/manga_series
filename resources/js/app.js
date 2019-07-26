@@ -1,4 +1,5 @@
 require('./bootstrap');
+require('intersection-observer');//IE pollyfill
 window.Vue = require('vue');
 import Quasar from 'quasar';
 import 'quasar/dist/quasar.min.css';
@@ -9,14 +10,17 @@ axios.defaults.headers.get['Access-Control-Allow-Origin'] = 'http://localhost:80
 //axios.defaults.headers.get['X-RapidAPI-Key'] = '40ae237048mshe16e4269a69e6eep10ec6fjsnf54b841f37c4';
 //consistent compoents
 const NavBar = () => import('./components/layout/nav-bar');
-
+import SearchBar from './components/common/search-bar';
 //pages
-import LandingPage from './components/pages/landing-page';
+import HomePage from './components/pages/home-page';
+import CategoryPage from './components/pages/category-page';
 
 const app = new Vue({
   el: '#app',
   components: {
-    'landing-page':LandingPage,
     'nav-bar':NavBar,
+    'home-page':HomePage,
+    'category-page':CategoryPage,
+    'search-bar':SearchBar,
   }
 });
