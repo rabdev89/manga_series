@@ -27,7 +27,6 @@
   .categories-list {
     text-decoration:none;
     color:#abb7c4;
-
     font-size: 13px;
     font-weight: bold;
     text-transform: uppercase;
@@ -93,7 +92,7 @@
   <div class="category-container row">
     <!-- Top Categories -->
     <div class="category-links row col-xs-12 justify-around gt-sm">
-      <div v-for="(cat, i) in catsToShow" class="items-center">
+      <div v-for="cat in catsToShow" :key="'toplink'+cat" class="items-center">
         <q-icon name="label" color="red-13"></q-icon>
         <a :href="'/manga/categories/'+cat.replace(/ /g, '-').toLowerCase()">{{cat}}</a>
       </div>
@@ -111,7 +110,7 @@
         <!-- Manga Items -->
         <m-card-detail
           v-for="manga in mangas" 
-          :key="'catmanga'+manga.i"
+          :key="'catmanga'+manga.id"
           :manga="manga"
           :view-as="viewAs"
           :class="['manga-wrap row', viewAs == 'grid' ? 'col-xs-12 col-sm-6 col-md-4' : 'col-12']">
@@ -123,7 +122,7 @@
       <h5>All Categories</h5>
       <div :class="['list-container', 'q-pa-md', fullCatListShowing ? '' : 'cutoff']">
         <q-list bordered separator class="row">
-          <a  class="col-xs-6" :href="'/manga/categories/'+cat.slug" v-for="(cat, i) in categories" :key="cat.slug+'link'">
+          <a  class="col-xs-6" :href="'/manga/categories/'+cat.slug" v-for="cat in categories" :key="cat.slug+'link'">
             <q-item class="items-center" clickable v-ripple>
               <q-icon name="arrow_right" color="red-13"></q-icon> 
             <q-item-section>{{cat.name}}</q-item-section>
@@ -168,19 +167,11 @@ export default {
     this.loading = true;
     let seenCats = [];
     let catMangas = [];
-
-    // this.fetchManga().then(resp => {
-    //   this.oldData = resp;
-    //   this.getManga(this.oldData[5693].i, 5693);
-    // });
-    this.fetchNewData().then(resp => {
-      console.log(resp);
-    });
     
-    this.fetchManga().then(mangas => {
+    this.fetchMangaData().then(mangas => {
       mangas.forEach((manga) => {
         //extract categories
-        manga.c.forEach((cat) => {
+        manga.categories.forEach((cat) => {
           let catObj = {name:cat,slug:cat.replace(/ /g, '-').toLowerCase()};
           //see if this category is the chosen one
           if(catObj.slug == this.catSlug) {
@@ -201,7 +192,7 @@ export default {
       }
       
       //sort by latest by default
-      catMangas.sort((a, b) => { return a.ld - b.ld});
+      catMangas.sort((a, b) => { return a.last_chapter_date - b.last_chapter_date});
       //take 20 TODO paginate, probably better to do with laravel
       //this.mangas = catMangas.slice(0, 20);
       this.mangas = catMangas;
@@ -209,25 +200,5 @@ export default {
 
     });
   },
-  methods: {
-    getManga(id, i) {
-      axios.get('/data/data.json').then(resp1 => {
-        axios.get('https://www.mangaeden.com/ajax/login/?username=mfinnigan&password=F655C2FgZB4cfqt').then(resp2 => {
-          axios.get('https://www.mangaeden.com/api/manga/'+id).then(resp3 => {
-            console.log((this.oldData.length - i) + ' to go');
-            i++;
-            this.newData.push(resp3.data);
-            console.log(this.newData.length + ' fetched');
-            console.log('--------');
-            console.log(JSON.stringify(this.newData));
-            console.log('----------');
-            if(i < this.oldData.length) {
-              this.getManga(this.oldData[i].i, i);
-            }
-          });
-        });
-      });
-    }
-  }
 }
 </script>

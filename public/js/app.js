@@ -2142,15 +2142,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     manga: {}
   },
   data: function data() {
     return {
+      hovering: false,
       //img: {backgroundImage:'url(https://cdn.mangaeden.com/mangasimg/ee/eeb235371255db3a5ee15e7b26e375bfeebd0457cec8efd041d0a013.jpg)'},
       img: {
-        backgroundImage: 'url(https://cdn.mangaeden.com/mangasimg/' + this.manga.im
+        backgroundImage: 'url(' + (this.manga.imageURL ? this.manga.imageURL : 'https://cdn.mangaeden.com/mangasimg/' + this.manga.image) + ')'
       }
     };
   },
@@ -2366,7 +2378,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2397,18 +2408,11 @@ __webpack_require__.r(__webpack_exports__);
     //fetch data
     this.loading = true;
     var seenCats = [];
-    var catMangas = []; // this.fetchManga().then(resp => {
-    //   this.oldData = resp;
-    //   this.getManga(this.oldData[5693].i, 5693);
-    // });
-
-    this.fetchNewData().then(function (resp) {
-      console.log(resp);
-    });
-    this.fetchManga().then(function (mangas) {
+    var catMangas = [];
+    this.fetchMangaData().then(function (mangas) {
       mangas.forEach(function (manga) {
         //extract categories
-        manga.c.forEach(function (cat) {
+        manga.categories.forEach(function (cat) {
           var catObj = {
             name: cat,
             slug: cat.replace(/ /g, '-').toLowerCase()
@@ -2439,38 +2443,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
       catMangas.sort(function (a, b) {
-        return a.ld - b.ld;
+        return a.last_chapter_date - b.last_chapter_date;
       }); //take 20 TODO paginate, probably better to do with laravel
       //this.mangas = catMangas.slice(0, 20);
 
       _this.mangas = catMangas;
       _this.loading = false;
     });
-  },
-  methods: {
-    getManga: function getManga(id, i) {
-      var _this2 = this;
-
-      axios.get('/data/data.json').then(function (resp1) {
-        axios.get('https://www.mangaeden.com/ajax/login/?username=mfinnigan&password=F655C2FgZB4cfqt').then(function (resp2) {
-          axios.get('https://www.mangaeden.com/api/manga/' + id).then(function (resp3) {
-            console.log(_this2.oldData.length - i + ' to go');
-            i++;
-
-            _this2.newData.push(resp3.data);
-
-            console.log(_this2.newData.length + ' fetched');
-            console.log('--------');
-            console.log(JSON.stringify(_this2.newData));
-            console.log('----------');
-
-            if (i < _this2.oldData.length) {
-              _this2.getManga(_this2.oldData[i].i, i);
-            }
-          });
-        });
-      });
-    }
   }
 });
 
@@ -2657,34 +2636,36 @@ __webpack_require__.r(__webpack_exports__);
       mangaByLatestChapter: [],
       randomManga: [],
       fetchedManga: [],
-      browsing: 'new',
       tab: 'new',
       searchText: '',
-      loading: false
+      loading: false,
+      lala: []
     };
   },
   computed: {},
   created: function created() {},
   mounted: function mounted() {
-    this.fetchMangaData();
+    var _this = this;
+
+    this.loading = true;
+    this.fetchMangaData().then(function (manga) {
+      //cut out manga that dont have chapters
+      manga = manga.filter(function (m) {
+        return m.chapters.length && m.title && (m.imageURL || m.image);
+      });
+
+      _this.pushToArray(_this.randomManga, manga.slice(0, 8));
+
+      _this.pushToArray(_this.mangaByLatestChapter, manga.sort(function (a, b) {
+        return a.last_chapter_date - b.last_chapter_date;
+      }).slice(0, 8));
+
+      _this.pushToArray(_this.fetchedManga, manga.slice(10, 18));
+
+      _this.loading = false;
+    });
   },
   methods: {
-    fetchMangaData: function fetchMangaData() {
-      var _this = this;
-
-      this.loading = true;
-      this.fetchManga().then(function (manga) {
-        _this.pushToArray(_this.randomManga, manga.slice(0, 8));
-
-        _this.pushToArray(_this.mangaByLatestChapter, manga.sort(function (a, b) {
-          return a.ld - b.ld;
-        }).slice(0, 8));
-
-        _this.pushToArray(_this.fetchedManga, manga.slice(10, 18));
-
-        _this.loading = false;
-      });
-    },
     pushToArray: function pushToArray(arr, items) {
       var i = 0;
       var inv = setInterval(function () {
@@ -2695,6 +2676,266 @@ __webpack_require__.r(__webpack_exports__);
           clearInterval(inv);
         }
       }, 100);
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/manga-page.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/manga-page.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mixins_fetcher_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/fetcher.js */ "./resources/js/mixins/fetcher.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mixins: [_mixins_fetcher_js__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  props: {
+    slug: {}
+  },
+  data: function data() {
+    return {
+      manga: null
+    };
+  },
+  computed: {},
+  created: function created() {},
+  mounted: function mounted() {
+    var _this = this;
+
+    this.fetchMangaData().then(function (mangas) {
+      //find manga
+      mangas.forEach(function (manga) {
+        if (manga.title.replace(/ /g, '-').toLowerCase() == _this.slug) {
+          _this.manga = manga;
+        }
+      });
+
+      if (!_this.manga) {
+        console.log('Not Found');
+      }
+    });
+  },
+  methods: {
+    convertStatus: function convertStatus(status) {
+      return 'On Going';
+    },
+    formatNum: function formatNum(num) {
+      num = num.toString();
+
+      if (num.length == 4) {
+        return num[0] + ',' + num.substr(1, 3);
+      } else if (num.length == 5) {
+        return num.substr(0, 2) + ',' + num.substr(2, 4);
+      } else if (num.length == 6) {
+        return num.substr(0, 3) + ',' + num.substr(3, 5);
+      } else if (num.length == 7) {
+        return num[0] + ',' + num.substr(1, 3) + ',' + num.substr(4, 6);
+      }
+
+      return num;
     }
   }
 });
@@ -7196,7 +7437,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.manga-card[data-v-61f1021c] {\n  text-align: left;\n  height:400px;\n  background-repeat: no-repeat;\n  background-size: cover;\n}\n.overlay[data-v-61f1021c] {\n  width:100%;\n  height:100%;\n  background-color:transparent;\n  background-color: #00000087;\n}\n.title[data-v-61f1021c] {\n  margin: 10px 0px;\n  font-weight: bold;\n  text-transform: uppercase;\n}\n.content[data-v-61f1021c] {\n  color: white;\n  padding: 15px;\n  width: 85%;\n  margin: 0 auto;\n}\n.category span[data-v-61f1021c] {\n  padding: 5px;\n  background: blue;\n  margin: 5px;\n  display: inline-block;\n  border-radius: 5px;\n  font-family: 'Dosis', sans-serif;\n  font-size: 12px;\n  color: #ffffff;\n  font-weight: 700;\n  text-transform: uppercase;\n}\n.category span.action[data-v-61f1021c] {\n  background:#ce0808;\n}\n.category span.fantasy[data-v-61f1021c] {\n  background:green;\n}\n.category span.comedy[data-v-61f1021c] {\n  background:#f5b50a;\n}\n.category span.adventure[data-v-61f1021c] {\n  background:#1692bb;\n}\n/*Small devices*/\n@media (min-width: 600px) {\n}\n/*Medium devices*/\n@media (min-width: 1439px) {\n}\n/*Large devices*/\n@media (min-width: 1919px) {\n}\n/*Extra large devices*/\n@media (min-width: 1920px) {\n}\n", ""]);
+exports.push([module.i, "\n.manga-card[data-v-61f1021c] {\n  text-align: left;\n  height:400px;\n  background-repeat: no-repeat;\n  background-size: cover;\n}\n.overlay[data-v-61f1021c] {\n  width:100%;\n  height:100%;\n  background-color:transparent;\n  background-color: #00000087;\n}\n.title[data-v-61f1021c] {\n  margin: 10px 0px;\n  font-weight: bold;\n  text-transform: uppercase;\n}\n.content[data-v-61f1021c] {\n  color: white;\n  padding: 15px;\n  width: 85%;\n  margin: 0 auto;\n}\n.category span[data-v-61f1021c] {\n  padding: 5px;\n  background: rgb(35, 58, 80);\n  margin: 5px;\n  display: inline-block;\n  border-radius: 5px;\n  font-family: 'Dosis', sans-serif;\n  font-size: 12px;\n  color: #ffffff;\n  font-weight: 700;\n  text-transform: uppercase;\n}\n.category span.action[data-v-61f1021c] {\n  background:#ce0808;\n}\n.category span.fantasy[data-v-61f1021c] {\n  background:green;\n}\n.category span.comedy[data-v-61f1021c] {\n  background:#f5b50a;\n}\n.category span.adventure[data-v-61f1021c] {\n  background:#1692bb;\n}\n.hovering[data-v-61f1021c] {\n  color:#dcf836;\n}\n/*Small devices*/\n@media (min-width: 600px) {\n.manga-card[data-v-61f1021c] {\n    margin:0 10px;\n}\n}\n/*Medium devices*/\n@media (min-width: 1439px) {\n.manga-card[data-v-61f1021c] {\n    margin:0 20px;\n}\n}\n/*Large devices*/\n@media (min-width: 1919px) {\n}\n/*Extra large devices*/\n@media (min-width: 1920px) {\n}\n", ""]);
 
 // exports
 
@@ -7234,7 +7475,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.category-container[data-v-67bbd110] {\n  margin-top: 15px;\n  color:white;\n  font-family: 'Dosis', sans-serif;\n}\n.category-links[data-v-67bbd110] {\n  padding:15px;\n  background:#0f2133;\n  border: 3px solid #233a50;\n}\n.category-links div[data-v-67bbd110] {\n  padding:5px;\n  font-family: 'Dosis', sans-serif;\n  font-weight: bold;\n  text-transform: uppercase;\n}\n.category-links a[data-v-67bbd110] {\n  color:white;\n  text-decoration:none;\n}\n.category-links a[data-v-67bbd110]:hover {\n  text-decoration: underline;\n}\n.categories-list[data-v-67bbd110] {\n  text-decoration:none;\n  color:#abb7c4;\n\n  font-size: 13px;\n  font-weight: bold;\n  text-transform: uppercase;\n}\n.categories-list .list-container[data-v-67bbd110], .mangas-container[data-v-67bbd110] {\n  background-color: #0b1a2a;\n  border: 3px solid #0f2133;\n}\n.list-container a[data-v-67bbd110] {\n  color: inherit;\n  text-decoration: inherit;\n}\n.list-container.cutoff[data-v-67bbd110] {\n  max-height: 50vh;\n  overflow: hidden;\n}\n.allcats-link[data-v-67bbd110] {\n  background:rgb(35, 58, 80);\n  font-size:24px;\n}\nh1[data-v-67bbd110] {\n  font-weight: bold;\n  text-transform: uppercase;\n  font-size:25px;\n}\nh5[data-v-67bbd110] {\n  margin: 30px;\n  padding: 15px;\n  border-bottom: 2px solid;\n  text-align: center;\n}\n.mangas-container[data-v-67bbd110] {\n  padding:15px;\n  border-radius:10px;\n}\n.manga-wrap[data-v-67bbd110] {\n  padding: 5px;\n  border: 1px solid #233a50;\n  margin: 10px 0;\n  background:#172533;\n}\n\n/*Small devices*/\n@media (min-width: 600px) {\n.category-container[data-v-67bbd110] {\n    padding-left: 15px;\n    padding-right: 15px;\n}\n}\n/*Medium devices*/\n@media (min-width: 1439px) {\n.category-container[data-v-67bbd110] {\n    margin:0 auto;\n    width: 1170px;\n}\n}\n/*Large devices*/\n@media (min-width: 1919px) {\n}\n", ""]);
+exports.push([module.i, "\n.category-container[data-v-67bbd110] {\n  margin-top: 15px;\n  color:white;\n  font-family: 'Dosis', sans-serif;\n}\n.category-links[data-v-67bbd110] {\n  padding:15px;\n  background:#0f2133;\n  border: 3px solid #233a50;\n}\n.category-links div[data-v-67bbd110] {\n  padding:5px;\n  font-family: 'Dosis', sans-serif;\n  font-weight: bold;\n  text-transform: uppercase;\n}\n.category-links a[data-v-67bbd110] {\n  color:white;\n  text-decoration:none;\n}\n.category-links a[data-v-67bbd110]:hover {\n  text-decoration: underline;\n}\n.categories-list[data-v-67bbd110] {\n  text-decoration:none;\n  color:#abb7c4;\n  font-size: 13px;\n  font-weight: bold;\n  text-transform: uppercase;\n}\n.categories-list .list-container[data-v-67bbd110], .mangas-container[data-v-67bbd110] {\n  background-color: #0b1a2a;\n  border: 3px solid #0f2133;\n}\n.list-container a[data-v-67bbd110] {\n  color: inherit;\n  text-decoration: inherit;\n}\n.list-container.cutoff[data-v-67bbd110] {\n  max-height: 50vh;\n  overflow: hidden;\n}\n.allcats-link[data-v-67bbd110] {\n  background:rgb(35, 58, 80);\n  font-size:24px;\n}\nh1[data-v-67bbd110] {\n  font-weight: bold;\n  text-transform: uppercase;\n  font-size:25px;\n}\nh5[data-v-67bbd110] {\n  margin: 30px;\n  padding: 15px;\n  border-bottom: 2px solid;\n  text-align: center;\n}\n.mangas-container[data-v-67bbd110] {\n  padding:15px;\n  border-radius:10px;\n}\n.manga-wrap[data-v-67bbd110] {\n  padding: 5px;\n  border: 1px solid #233a50;\n  margin: 10px 0;\n  background:#172533;\n}\n\n/*Small devices*/\n@media (min-width: 600px) {\n.category-container[data-v-67bbd110] {\n    padding-left: 15px;\n    padding-right: 15px;\n}\n}\n/*Medium devices*/\n@media (min-width: 1439px) {\n.category-container[data-v-67bbd110] {\n    margin:0 auto;\n    width: 1170px;\n}\n}\n/*Large devices*/\n@media (min-width: 1919px) {\n}\n", ""]);
 
 // exports
 
@@ -7253,7 +7494,26 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.home-container[data-v-679c6db7] {\n  padding-left: 15px;\n  padding-right: 15px;\n  margin-top: 15px;\n}\n.bg-theme[data-v-679c6db7] {\n  background:#020d18;\n}\n.bg-contrast[data-v-679c6db7] {\n  background: #0f2133;\n  color:white;\n}\nh2[data-v-679c6db7] {\n  font-family: 'Dosis', sans-serif;\n  font-size: 24px;\n  color: #ffffff;\n  font-weight: bold;\n  text-transform: uppercase;\n  margin: 0;\n  text-align: center;\n}\n.carousel[data-v-679c6db7] {\n  margin-top:30px;\n  height:400px;\n}\n.spinner-container[data-v-679c6db7] {\n  height:400px;\n}\n/*Small devices*/\n@media (min-width: 600px) {\n.home-container[data-v-679c6db7] {\n    width: 90%;\n    margin: 0 auto;\n}\nh2[data-v-679c6db7] {\n    text-align: left;\n}\n}\n/*Medium devices*/\n@media (min-width: 1439px) {\n.home-container[data-v-679c6db7] {\n    width: 1170px;\n}\n}\n/*Large devices*/\n@media (min-width: 1919px) {\n}\n.fade-enter-active[data-v-679c6db7] {\n  -webkit-animation: go-data-v-679c6db7 0.7s;\n          animation: go-data-v-679c6db7 0.7s;\n  -webkit-animation-delay:0.3s;\n          animation-delay:0.3s;\n  opacity: 0;\n}\n@-webkit-keyframes go-data-v-679c6db7 {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes go-data-v-679c6db7 {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n", ""]);
+exports.push([module.i, "\n.home-container[data-v-679c6db7] {\n  padding-left: 15px;\n  padding-right: 15px;\n  margin-top: 15px;\n}\n.bg-theme[data-v-679c6db7] {\n  background:#020d18;\n}\n.bg-contrast[data-v-679c6db7] {\n  background: #0f2133;\n  color:white;\n}\nh2[data-v-679c6db7] {\n  font-family: 'Dosis', sans-serif;\n  color: #ffffff;\n  font-size: 24px;\n  font-weight: bold;\n  text-transform: uppercase;\n  margin: 0;\n  text-align: center;\n  padding-bottom: 10px;\n}\n.carousel[data-v-679c6db7] {\n  margin-top:30px;\n}\n.spinner-container[data-v-679c6db7] {\n  height:400px;\n}\n/*Small devices*/\n@media (min-width: 600px) {\n.home-container[data-v-679c6db7] {\n    width: 90%;\n    margin: 0 auto;\n}\nh2[data-v-679c6db7] {\n    text-align: left;\n}\n}\n/*Medium devices*/\n@media (min-width: 1439px) {\n.home-container[data-v-679c6db7] {\n    width: 1170px;\n}\n}\n/*Large devices*/\n@media (min-width: 1919px) {\n}\n.fade-enter-active[data-v-679c6db7] {\n  -webkit-animation: go-data-v-679c6db7 0.7s;\n          animation: go-data-v-679c6db7 0.7s;\n  -webkit-animation-delay:0.3s;\n          animation-delay:0.3s;\n  opacity: 0;\n}\n@-webkit-keyframes go-data-v-679c6db7 {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes go-data-v-679c6db7 {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/manga-page.vue?vue&type=style&index=0&id=6895c604&scoped=true&lang=css&":
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/manga-page.vue?vue&type=style&index=0&id=6895c604&scoped=true&lang=css& ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.manga-page[data-v-6895c604] {\n  font-family: 'Dosis', sans-serif;\n  color: #ffffff;\n}\nh2[data-v-6895c604] {\n  font-size: 20px;\n  font-weight: bold;\n  text-transform: uppercase;\n  margin: 0;\n  text-align: center;\n  line-height: 3rem;\n}\nh5[data-v-6895c604] {\n  padding: 15px;\n  margin: 30px 0;\n  font-size: 30px;\n  font-weight: bold;\n  text-transform: uppercase;\n  border-bottom: 1px solid;\n}\n.details-contain[data-v-6895c604] {\n  margin-bottom: 30px;\n}\n.content-row[data-v-6895c604] {\n  padding: 10px 0;\n  border-top:1px solid white;\n  border-top:1px solid #ffffff59;\n}\n.content-row div[data-v-6895c604]:first-child {\n  font-weight: bold;\n  text-transform: uppercase;\n  font-size: 17px;\n}\n.content-row div:first-child div[data-v-6895c604] {\n  margin-left:5px;\n}\n.category span[data-v-6895c604] {\n  padding: 5px;\n  background: rgb(35, 58, 80);\n  margin: 5px;\n  display: inline-block;\n  border-radius: 5px;\n  font-family: 'Dosis', sans-serif;\n  font-size: 12px;\n  color: #ffffff;\n  font-weight: 700;\n  text-transform: uppercase;\n}\n.category span.action[data-v-6895c604] {\n  background:#ce0808;\n}\n.category span.fantasy[data-v-6895c604] {\n  background:green;\n}\n.category span.comedy[data-v-6895c604] {\n  background:#f5b50a;\n}\n.category span.adventure[data-v-6895c604] {\n  background:#1692bb;\n}\n.chapters-contain[data-v-6895c604] {\n  background-color: #0b1a2a;\n  border: 3px solid #0f2133;\n}\n.chapters-contain a[data-v-6895c604] {\n  font-size:17px;\n  color:#4280bf;\n}\n.chapter-item[data-v-6895c604] {\n  border-top:1px solid white;\n  border-top:1px solid #ffffff59;\n}\n/*Small devices*/\n@media (min-width: 600px) {\nh2[data-v-6895c604] {\n    font-size: 24px;\n}\n}\n/*Medium devices*/\n@media (min-width: 1439px) {\n.manga-page[data-v-6895c604] {\n    margin:0 auto;\n    width: 1170px;\n}\n}\n/*Large devices*/\n@media (min-width: 1919px) {\n}\n", ""]);
 
 // exports
 
@@ -74432,6 +74692,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/manga-page.vue?vue&type=style&index=0&id=6895c604&scoped=true&lang=css&":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/manga-page.vue?vue&type=style&index=0&id=6895c604&scoped=true&lang=css& ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./manga-page.vue?vue&type=style&index=0&id=6895c604&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/manga-page.vue?vue&type=style&index=0&id=6895c604&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/lib/addStyles.js":
 /*!****************************************************!*\
   !*** ./node_modules/style-loader/lib/addStyles.js ***!
@@ -75074,7 +75364,7 @@ var render = function() {
               }
             ],
             attrs: {
-              src: "https://cdn.mangaeden.com/mangasimg/" + _vm.manga.im,
+              src: "https://cdn.mangaeden.com/mangasimg/" + _vm.manga.image,
               width: "100%"
             }
           })
@@ -75094,7 +75384,18 @@ var render = function() {
           ],
           staticClass: "m-title list col-12"
         },
-        [_c("a", { attrs: { href: "/manga/" } }, [_vm._v(_vm._s(_vm.manga.t))])]
+        [
+          _c(
+            "a",
+            {
+              attrs: {
+                href:
+                  "/manga/" + _vm.manga.title.replace(/ /g, "-").toLowerCase()
+              }
+            },
+            [_vm._v(_vm._s(_vm.manga.title))]
+          )
+        ]
       ),
       _vm._v(" "),
       _c(
@@ -75108,9 +75409,16 @@ var render = function() {
         },
         [
           _c("p", { staticClass: "m-title" }, [
-            _c("a", { attrs: { href: "/manga/" } }, [
-              _vm._v(_vm._s(_vm.manga.t))
-            ])
+            _c(
+              "a",
+              {
+                attrs: {
+                  href:
+                    "/manga/" + _vm.manga.title.replace(/ /g, "-").toLowerCase()
+                }
+              },
+              [_vm._v(_vm._s(_vm.manga.title))]
+            )
           ]),
           _vm._v(" "),
           _c(
@@ -75118,21 +75426,21 @@ var render = function() {
             { staticClass: "m-hits" },
             [
               _c("q-icon", { attrs: { name: "remove_red_eye" } }),
-              _vm._v(" " + _vm._s(_vm.formatNum(_vm.manga.h)))
+              _vm._v(" " + _vm._s(_vm.formatNum(_vm.manga.hits)))
             ],
             1
           ),
           _vm._v(" "),
-          _vm.manga.c.length
+          _vm.manga.categories.length
             ? _c(
                 "p",
                 { staticClass: "m-category" },
                 [
                   _c("q-icon", { attrs: { name: "category" } }),
                   _vm._v(" "),
-                  _vm._l(_vm.manga.c, function(c, i) {
+                  _vm._l(_vm.manga.categories, function(c, i) {
                     return i < 2
-                      ? _c("span", [
+                      ? _c("span", { key: _vm.manga.id + "c" + c }, [
                           _vm._v(
                             "\n        " +
                               _vm._s(c) +
@@ -75150,7 +75458,7 @@ var render = function() {
           _c("p", { staticClass: "m-lt" }),
           _vm._v(" "),
           _c("p", { staticClass: "m-status" }, [
-            _vm._v(_vm._s(_vm.convertStatus(_vm.manga.s)))
+            _vm._v(_vm._s(_vm.convertStatus(_vm.manga.status)))
           ])
         ]
       )
@@ -75179,25 +75487,70 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "manga-card", style: _vm.img }, [
-    _c("div", { staticClass: "overlay column justify-end" }, [
-      _c("div", { staticClass: "content" }, [
-        _c("h5", { staticClass: "title" }, [_vm._v(_vm._s(_vm.manga.t))]),
-        _vm._v(" "),
-        _vm.manga.c.length
-          ? _c("p", { staticClass: "category" }, [
+  return _c(
+    "div",
+    {
+      class: ["manga-card", _vm.hovering ? "hovering" : ""],
+      style: _vm.img,
+      on: {
+        mouseenter: function($event) {
+          _vm.hovering = true
+        },
+        mouseleave: function($event) {
+          _vm.hovering = false
+        }
+      }
+    },
+    [
+      _c(
+        "a",
+        {
+          attrs: {
+            href: "/manga/" + _vm.manga.title.replace(/ /g, "-").toLowerCase()
+          }
+        },
+        [
+          _c("div", { staticClass: "overlay column justify-end" }, [
+            _c("div", { staticClass: "content" }, [
+              _c("h5", { class: ["title", _vm.hovering ? "hovering" : ""] }, [
+                _vm._v(_vm._s(_vm.manga.title))
+              ]),
+              _vm._v(" "),
+              _vm.manga.categories.length
+                ? _c("p", { staticClass: "category" }, [
+                    _c(
+                      "span",
+                      {
+                        class: _vm.manga.categories[0]
+                          .replace(/ /g, "-")
+                          .toLowerCase()
+                      },
+                      [_vm._v(_vm._s(_vm.manga.categories[0]))]
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
               _c(
-                "span",
-                { class: _vm.manga.c[0].replace(/ /g, "-").toLowerCase() },
-                [_vm._v(_vm._s(_vm.manga.c[0]))]
+                "p",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: false,
+                      expression: "false"
+                    }
+                  ],
+                  staticClass: "chapterDate"
+                },
+                [_vm._v(_vm._s(_vm.manga.last_chapter_date))]
               )
             ])
-          : _vm._e(),
-        _vm._v(" "),
-        _c("p", { staticClass: "chapterDate" }, [_vm._v(_vm._s(_vm.manga.ld))])
-      ])
-    ])
-  ])
+          ])
+        ]
+      )
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -75283,10 +75636,10 @@ var render = function() {
     _c(
       "div",
       { staticClass: "category-links row col-xs-12 justify-around gt-sm" },
-      _vm._l(_vm.catsToShow, function(cat, i) {
+      _vm._l(_vm.catsToShow, function(cat) {
         return _c(
           "div",
-          { staticClass: "items-center" },
+          { key: "toplink" + cat, staticClass: "items-center" },
           [
             _c("q-icon", { attrs: { name: "label", color: "red-13" } }),
             _vm._v(" "),
@@ -75364,7 +75717,7 @@ var render = function() {
         { staticClass: "row" },
         _vm._l(_vm.mangas, function(manga) {
           return _c("m-card-detail", {
-            key: "catmanga" + manga.i,
+            key: "catmanga" + manga.id,
             class: [
               "manga-wrap row",
               _vm.viewAs == "grid" ? "col-xs-12 col-sm-6 col-md-4" : "col-12"
@@ -75392,7 +75745,7 @@ var render = function() {
           _c(
             "q-list",
             { staticClass: "row", attrs: { bordered: "", separator: "" } },
-            _vm._l(_vm.categories, function(cat, i) {
+            _vm._l(_vm.categories, function(cat) {
               return _c(
                 "a",
                 {
@@ -75525,10 +75878,10 @@ var render = function() {
               perPageCustom: [[768, 3], [1024, 4]]
             }
           },
-          _vm._l(_vm.randomManga, function(manga, i) {
+          _vm._l(_vm.randomManga, function(manga) {
             return _c(
               "slide",
-              { key: manga.i, staticClass: "slide" },
+              { key: "random" + manga.id, staticClass: "slide" },
               [
                 _c(
                   "transition",
@@ -75587,7 +75940,7 @@ var render = function() {
           _vm._l(_vm.mangaByLatestChapter, function(manga) {
             return _c(
               "slide",
-              { key: manga.i, staticClass: "slide" },
+              { key: "latest" + manga.id, staticClass: "slide" },
               [_c("manga-card", { attrs: { manga: manga } })],
               1
             )
@@ -75695,7 +76048,7 @@ var render = function() {
                       _vm._l(_vm.fetchedManga, function(manga) {
                         return _c(
                           "slide",
-                          { key: manga.i, staticClass: "slide" },
+                          { key: "new" + manga.id, staticClass: "slide" },
                           [_c("manga-card", { attrs: { manga: manga } })],
                           1
                         )
@@ -75749,7 +76102,7 @@ var render = function() {
                       _vm._l(_vm.fetchedManga, function(manga) {
                         return _c(
                           "slide",
-                          { key: manga.i, staticClass: "slide" },
+                          { key: "trending" + manga.id, staticClass: "slide" },
                           [_c("manga-card", { attrs: { manga: manga } })],
                           1
                         )
@@ -75803,7 +76156,7 @@ var render = function() {
                       _vm._l(_vm.fetchedManga, function(manga) {
                         return _c(
                           "slide",
-                          { key: manga.i, staticClass: "slide" },
+                          { key: "popular" + manga.id, staticClass: "slide" },
                           [_c("manga-card", { attrs: { manga: manga } })],
                           1
                         )
@@ -75823,6 +76176,371 @@ var render = function() {
       1
     )
   ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/manga-page.vue?vue&type=template&id=6895c604&scoped=true&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/manga-page.vue?vue&type=template&id=6895c604&scoped=true& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.manga
+    ? _c("div", { staticClass: "manga-page" }, [
+        _c(
+          "div",
+          { staticClass: "container row q-col-gutter-lg items-center" },
+          [
+            _c("div", { staticClass: "col-xs-12 col-sm-4" }, [
+              _c(
+                "h2",
+                [
+                  _c("q-icon", {
+                    attrs: {
+                      size: "30px",
+                      color: "red-13",
+                      name: "label_important"
+                    }
+                  }),
+                  _vm._v(" " + _vm._s(_vm.manga.title))
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("img", {
+                attrs: {
+                  src: _vm.manga.imageURL
+                    ? _vm.manga.imageURL
+                    : "https://cdn.mangaeden.com/mangasimg/" + _vm.manga.image,
+                  width: "100%"
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "details-contain col-xs-12 col-sm-8" }, [
+              _c(
+                "div",
+                { staticClass: "row items-center lt-sm" },
+                [
+                  _c("q-icon", {
+                    attrs: {
+                      size: "30px",
+                      color: "red-13",
+                      name: "label_important"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("h5", [_vm._v("Details")])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "content-row row justify-between",
+                  staticStyle: { "border-top": "none" }
+                },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "row items-center" },
+                    [
+                      _c("q-icon", {
+                        attrs: { color: "lime-14", name: "book" }
+                      }),
+                      _vm._v(" "),
+                      _c("div", [_vm._v("Other Name(s):")])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    _vm._l(_vm.manga.aka, function(aka, i) {
+                      return _c("span", { key: aka }, [
+                        _vm._v(
+                          _vm._s(aka) +
+                            _vm._s(i !== _vm.manga.aka.length - 1 ? ", " : "")
+                        )
+                      ])
+                    }),
+                    0
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "content-row row justify-between" }, [
+                _c(
+                  "div",
+                  { staticClass: "row items-center" },
+                  [
+                    _c("q-icon", {
+                      attrs: { color: "lime-14", name: "event" }
+                    }),
+                    _vm._v(" "),
+                    _c("div", [_vm._v("Released:")])
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", [_vm._v(_vm._s(_vm.manga.released))])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "content-row row justify-between" }, [
+                _c(
+                  "div",
+                  { staticClass: "row items-center" },
+                  [
+                    _c("q-icon", {
+                      attrs: { color: "lime-14", name: "person" }
+                    }),
+                    _vm._v(" "),
+                    _c("div", [_vm._v("Author:")])
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", [_vm._v(_vm._s(_vm.manga.author))])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "content-row row justify-between" }, [
+                _c(
+                  "div",
+                  { staticClass: "row items-center" },
+                  [
+                    _c("q-icon", {
+                      attrs: { color: "lime-14", name: "brush" }
+                    }),
+                    _vm._v(" "),
+                    _c("div", [_vm._v("Artist:")])
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", [_vm._v(_vm._s(_vm.manga.artist))])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "content-row row justify-between" }, [
+                _c(
+                  "div",
+                  { staticClass: "row items-center" },
+                  [
+                    _c("q-icon", {
+                      attrs: { color: "lime-14", name: "category" }
+                    }),
+                    _vm._v(" "),
+                    _c("div", [_vm._v("Categories:")])
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "category" },
+                  _vm._l(_vm.manga.categories, function(c) {
+                    return _c(
+                      "span",
+                      { key: c, class: c.replace(/ /g, "-").toLowerCase() },
+                      [_vm._v(_vm._s(c))]
+                    )
+                  }),
+                  0
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "content-row row justify-between" }, [
+                _c(
+                  "div",
+                  { staticClass: "row items-center" },
+                  [
+                    _c("q-icon", {
+                      attrs: { color: "lime-14", name: "graphic_eq" }
+                    }),
+                    _vm._v(" "),
+                    _c("div", [_vm._v("Status:")])
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", [_vm._v(_vm._s(_vm.convertStatus(_vm.manga.status)))])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "content-row row justify-between" }, [
+                _c(
+                  "div",
+                  { staticClass: "row items-center" },
+                  [
+                    _c("q-icon", {
+                      attrs: { color: "lime-14", name: "remove_red_eye" }
+                    }),
+                    _vm._v(" "),
+                    _c("div", [_vm._v("Views:")])
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", [_vm._v(_vm._s(_vm.formatNum(_vm.manga.hits)))])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "content-row row justify-between" }, [
+                _c(
+                  "div",
+                  { staticClass: "row items-center" },
+                  [
+                    _c("q-icon", { attrs: { color: "lime-14", name: "info" } }),
+                    _vm._v(" "),
+                    _c("div", [_vm._v("Description:")])
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", {
+                  staticStyle: { padding: "10px" },
+                  domProps: { innerHTML: _vm._s(_vm.manga.description) }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "chapters-contain col-xs-12" },
+              [
+                _c(
+                  "div",
+                  { staticClass: "row items-center" },
+                  [
+                    _c("q-icon", {
+                      attrs: {
+                        size: "30px",
+                        color: "red-13",
+                        name: "label_important"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("h5", [_vm._v("Chapters")])
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "q-list",
+                  { attrs: { bordered: "" } },
+                  _vm._l(_vm.manga.chapters, function(chapter, i) {
+                    return _c(
+                      "q-item",
+                      {
+                        key: "chapter" + chapter[3],
+                        staticClass: "chapter-item",
+                        style: i == 0 ? "border-top:none" : ""
+                      },
+                      [
+                        _c("q-item-section", [
+                          _c(
+                            "a",
+                            {
+                              attrs: {
+                                href:
+                                  "/manga/" +
+                                  _vm.manga.id +
+                                  "/chapter/" +
+                                  chapter[3]
+                              }
+                            },
+                            [
+                              chapter[0] != chapter[2]
+                                ? _c(
+                                    "q-item-label",
+                                    [
+                                      _c("q-icon", {
+                                        attrs: {
+                                          color: "primary",
+                                          name: "book"
+                                        }
+                                      }),
+                                      _vm._v(
+                                        "\n                #" +
+                                          _vm._s(chapter[0]) +
+                                          " " +
+                                          _vm._s(chapter[2]) +
+                                          "\n              "
+                                      )
+                                    ],
+                                    1
+                                  )
+                                : _c(
+                                    "q-item-label",
+                                    [
+                                      _c("q-icon", {
+                                        attrs: {
+                                          color: "primary",
+                                          name: "book"
+                                        }
+                                      }),
+                                      _vm._v(
+                                        "\n                Chapter #" +
+                                          _vm._s(chapter[0]) +
+                                          "\n              "
+                                      )
+                                    ],
+                                    1
+                                  )
+                            ],
+                            1
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "q-item-section",
+                          { attrs: { side: "", middle: "" } },
+                          [
+                            _c(
+                              "q-item-label",
+                              {
+                                staticStyle: { color: "white" },
+                                attrs: { caption: "" }
+                              },
+                              [
+                                _c("q-icon", {
+                                  attrs: {
+                                    color: "white",
+                                    name: "calendar_today"
+                                  }
+                                }),
+                                _vm._v(" " + _vm._s(chapter[1]))
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  }),
+                  1
+                )
+              ],
+              1
+            )
+          ]
+        )
+      ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -88271,6 +88989,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_common_search_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/common/search-bar */ "./resources/js/components/common/search-bar.vue");
 /* harmony import */ var _components_pages_home_page__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/pages/home-page */ "./resources/js/components/pages/home-page.vue");
 /* harmony import */ var _components_pages_category_page__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/pages/category-page */ "./resources/js/components/pages/category-page.vue");
+/* harmony import */ var _components_pages_manga_page__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/pages/manga-page */ "./resources/js/components/pages/manga-page.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 __webpack_require__(/*! intersection-observer */ "./node_modules/intersection-observer/intersection-observer.js"); //IE pollyfill
@@ -88292,12 +89011,14 @@ var NavBar = function NavBar() {
 
 
 
+
 var app = new Vue({
   el: '#app',
   components: {
     'nav-bar': NavBar,
     'home-page': _components_pages_home_page__WEBPACK_IMPORTED_MODULE_3__["default"],
     'category-page': _components_pages_category_page__WEBPACK_IMPORTED_MODULE_4__["default"],
+    'manga-page': _components_pages_manga_page__WEBPACK_IMPORTED_MODULE_5__["default"],
     'search-bar': _components_common_search_bar__WEBPACK_IMPORTED_MODULE_2__["default"]
   }
 });
@@ -88798,6 +89519,93 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/pages/manga-page.vue":
+/*!******************************************************!*\
+  !*** ./resources/js/components/pages/manga-page.vue ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _manga_page_vue_vue_type_template_id_6895c604_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./manga-page.vue?vue&type=template&id=6895c604&scoped=true& */ "./resources/js/components/pages/manga-page.vue?vue&type=template&id=6895c604&scoped=true&");
+/* harmony import */ var _manga_page_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./manga-page.vue?vue&type=script&lang=js& */ "./resources/js/components/pages/manga-page.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _manga_page_vue_vue_type_style_index_0_id_6895c604_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./manga-page.vue?vue&type=style&index=0&id=6895c604&scoped=true&lang=css& */ "./resources/js/components/pages/manga-page.vue?vue&type=style&index=0&id=6895c604&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _manga_page_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _manga_page_vue_vue_type_template_id_6895c604_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _manga_page_vue_vue_type_template_id_6895c604_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "6895c604",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/pages/manga-page.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/manga-page.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/pages/manga-page.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_manga_page_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./manga-page.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/manga-page.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_manga_page_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/manga-page.vue?vue&type=style&index=0&id=6895c604&scoped=true&lang=css&":
+/*!***************************************************************************************************************!*\
+  !*** ./resources/js/components/pages/manga-page.vue?vue&type=style&index=0&id=6895c604&scoped=true&lang=css& ***!
+  \***************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_manga_page_vue_vue_type_style_index_0_id_6895c604_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./manga-page.vue?vue&type=style&index=0&id=6895c604&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/manga-page.vue?vue&type=style&index=0&id=6895c604&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_manga_page_vue_vue_type_style_index_0_id_6895c604_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_manga_page_vue_vue_type_style_index_0_id_6895c604_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_manga_page_vue_vue_type_style_index_0_id_6895c604_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_manga_page_vue_vue_type_style_index_0_id_6895c604_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_manga_page_vue_vue_type_style_index_0_id_6895c604_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/manga-page.vue?vue&type=template&id=6895c604&scoped=true&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/components/pages/manga-page.vue?vue&type=template&id=6895c604&scoped=true& ***!
+  \*************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_manga_page_vue_vue_type_template_id_6895c604_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./manga-page.vue?vue&type=template&id=6895c604&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/manga-page.vue?vue&type=template&id=6895c604&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_manga_page_vue_vue_type_template_id_6895c604_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_manga_page_vue_vue_type_template_id_6895c604_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/mixins/fetcher.js":
 /*!****************************************!*\
   !*** ./resources/js/mixins/fetcher.js ***!
@@ -88809,7 +89617,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   methods: {
-    fetchManga: function fetchManga() {
+    fetchMangaIds: function fetchMangaIds() {
       /**
         axios.get('https://www.mangaeden.com/ajax/login/?username=mfinnigan&password=F655C2FgZB4cfqt').then(resp => {
         axios.get('https://www.mangaeden.com/api/list/0')
@@ -88820,7 +89628,7 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
-    fetchNewData: function fetchNewData() {
+    fetchMangaData: function fetchMangaData() {
       return new Promise(function (resolve, reject) {
         return axios.get('/data/mangaDetails.json').then(function (resp) {
           resolve(resp.data);

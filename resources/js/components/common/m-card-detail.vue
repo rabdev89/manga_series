@@ -38,20 +38,20 @@
 <template>
   <div v-observe-visibility="visibilityChanged">
     <div :class="['img-contain', viewAs == 'list' ? 'hidden' : 'col']">
-      <img v-show="isVisible" :src="'https://cdn.mangaeden.com/mangasimg/'+manga.im" width="100%"/>
+      <img v-show="isVisible" :src="'https://cdn.mangaeden.com/mangasimg/'+manga.image" width="100%"/>
     </div>
-    <p v-show="viewAs == 'list'" class="m-title list col-12"><a href="/manga/">{{manga.t}}</a></p>
+    <p v-show="viewAs == 'list'" class="m-title list col-12"><a :href="'/manga/'+manga.title.replace(/ /g, '-').toLowerCase()">{{manga.title}}</a></p>
     <div :class="['m-content', viewAs, viewAs == 'list' ? 'row justify-around col-12' : 'col']">
-      <p class="m-title"><a href="/manga/">{{manga.t}}</a></p>
-      <p class="m-hits"><q-icon name="remove_red_eye"/> {{formatNum(manga.h)}}</p>
-      <p class="m-category" v-if="manga.c.length">
+      <p class="m-title"><a :href="'/manga/'+manga.title.replace(/ /g, '-').toLowerCase()">{{manga.title}}</a></p>
+      <p class="m-hits"><q-icon name="remove_red_eye"/> {{formatNum(manga.hits)}}</p>
+      <p class="m-category" v-if="manga.categories.length">
         <q-icon name="category"/>
-        <span v-for="(c, i) in manga.c" v-if="i < 2">
+        <span v-for="(c, i) in manga.categories" v-if="i < 2" :key="manga.id+'c'+c">
           {{c}}{{i < 1 && c.length > 1 ? '/' : ''}}
         </span>
       </p>
       <p class="m-lt"></p>
-      <p class="m-status">{{convertStatus(manga.s)}}</p>
+      <p class="m-status">{{convertStatus(manga.status)}}</p>
     </div>
   </div>
 </template>

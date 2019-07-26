@@ -13,16 +13,16 @@
   }
   h2 {
     font-family: 'Dosis', sans-serif;
-    font-size: 24px;
     color: #ffffff;
+    font-size: 24px;
     font-weight: bold;
     text-transform: uppercase;
     margin: 0;
     text-align: center;
+    padding-bottom: 10px;
   }
   .carousel {
     margin-top:30px;
-    height:400px;
   }
   .spinner-container {
     height:400px;
@@ -70,7 +70,7 @@
         <q-spinner-cube color="indigo" size="5rem" />
       </div>
       <carousel :autoplay="true" :autoplayTimeout="5000" class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 3],[1024, 4]]">
-        <slide v-for="(manga, i) in randomManga" :key="manga.i" class="slide">
+        <slide v-for="manga in randomManga" :key="'random'+manga.id" class="slide">
           <transition appear appear-active-class="fade-enter-active">
             <manga-card :manga="manga"></manga-card>
           </transition>
@@ -84,7 +84,7 @@
         <q-spinner-cube color="indigo" size="5rem" />
       </div>
       <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 3],[1024, 4]]">
-        <slide v-for="manga in mangaByLatestChapter" :key="manga.i" class="slide">
+        <slide v-for="manga in mangaByLatestChapter" :key="'latest'+manga.id" class="slide">
           <manga-card :manga="manga"></manga-card>
         </slide>
       </carousel>
@@ -115,7 +115,7 @@
               <q-spinner-cube color="indigo" size="5rem" />
             </div>
             <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 3],[1024, 4]]">
-              <slide v-for="manga in fetchedManga" :key="manga.i" class="slide">
+              <slide v-for="manga in fetchedManga" :key="'new'+manga.id" class="slide">
                 <manga-card :manga="manga"></manga-card>
               </slide>
             </carousel>
@@ -127,7 +127,7 @@
               <q-spinner-cube color="indigo" size="5rem" />
             </div>
             <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 3],[1024, 4]]">
-              <slide v-for="manga in fetchedManga" :key="manga.i" class="slide">
+              <slide v-for="manga in fetchedManga" :key="'trending'+manga.id" class="slide">
                 <manga-card :manga="manga"></manga-card>
               </slide>
             </carousel>
@@ -139,7 +139,7 @@
               <q-spinner-cube color="indigo" size="5rem" />
             </div>
             <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 3],[1024, 4]]">
-              <slide v-for="manga in fetchedManga" :key="manga.i" class="slide">
+              <slide v-for="manga in fetchedManga" :key="'popular'+manga.id" class="slide">
                 <manga-card :manga="manga"></manga-card>
               </slide>
             </carousel>
@@ -168,27 +168,28 @@ export default {
       mangaByLatestChapter: [],
       randomManga: [],
       fetchedManga: [],
-      browsing: 'new',
       tab: 'new',
       searchText: '',
       loading:false,
+      lala:[],
     }
   },
   computed: {},
   created() {},
   mounted() {
-    this.fetchMangaData();
+    this.loading = true;
+    this.fetchMangaData().then(manga => {
+      //cut out manga that dont have chapters
+      manga = manga.filter(m => {
+        return m.chapters.length && m.title && (m.imageURL || m.image);
+      });
+      this.pushToArray(this.randomManga, manga.slice(0, 8));
+      this.pushToArray(this.mangaByLatestChapter, manga.sort((a, b) => { return a.last_chapter_date - b.last_chapter_date}).slice(0, 8));
+      this.pushToArray(this.fetchedManga, manga.slice(10, 18));
+      this.loading = false;
+    });
   },
   methods: {
-    fetchMangaData() {
-      this.loading = true;
-      this.fetchManga().then(manga => {
-        this.pushToArray(this.randomManga, manga.slice(0, 8));
-        this.pushToArray(this.mangaByLatestChapter, manga.sort((a, b) => { return a.ld - b.ld}).slice(0, 8));
-        this.pushToArray(this.fetchedManga, manga.slice(10, 18));
-        this.loading = false;
-      });
-    },
     pushToArray(arr, items) {
       let i = 0;
       let inv = setInterval(() => {

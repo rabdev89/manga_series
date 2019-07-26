@@ -14,6 +14,7 @@ import SearchBar from './components/common/search-bar';
 //pages
 import HomePage from './components/pages/home-page';
 import CategoryPage from './components/pages/category-page';
+import MangaPage from './components/pages/manga-page';
 
 const app = new Vue({
   el: '#app',
@@ -21,6 +22,7 @@ const app = new Vue({
     'nav-bar':NavBar,
     'home-page':HomePage,
     'category-page':CategoryPage,
+    'manga-page': MangaPage,
     'search-bar':SearchBar,
   }
 });

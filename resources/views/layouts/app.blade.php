@@ -22,6 +22,14 @@
           padding-left: 15px;
           padding-right: 15px;
         }
+        a {
+          text-decoration: inherit;
+          color:inherit;
+        } 
+        a:hover {
+          text-decoration: underline;
+          color:#dcf836;
+        }
         /*Small devices*/
         @media (min-width: 600px) {
           #app {

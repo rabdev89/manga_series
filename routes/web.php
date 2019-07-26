@@ -8,3 +8,7 @@ Route::get('/', function () {
 Route::get('/manga/categories/{catSlug?}', function (Request $request) {
   return view('categories', ['slug' => isset($request->catSlug) ? $request->catSlug : 'all']);
 });
+
+Route::get('/manga/{slug?}', function (Request $request) {
+  return view('manga_page', ['slug' => $request->slug]);
+});
