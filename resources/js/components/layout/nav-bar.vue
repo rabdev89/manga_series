@@ -42,8 +42,8 @@
      <q-toolbar-title><a href="/" class="homelink">Manga Series</a></q-toolbar-title>
       <div class="menu-items gt-sm">
         <a href="/manga/categories/all">MANGA LIST</a>
-        <a href="/manga/hot">HOT MANGA</a>
-        <a href="/latest">LATEST RELEASES</a>
+        <a href="/manga/categories/hot">HOT MANGA</a>
+        <a href="/manga/categories/latest">LATEST RELEASES</a>
         <a href="/search">ADVANCED SEARCH</a>
       </div>
       <!-- Hamburger Dropdown -->

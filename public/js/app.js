@@ -1956,6 +1956,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vue_observe_visibility__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-observe-visibility */ "./node_modules/vue-observe-visibility/dist/vue-observe-visibility.esm.js");
+/* harmony import */ var _mixins_strings_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../mixins/strings.js */ "./resources/js/mixins/strings.js");
 //
 //
 //
@@ -2014,10 +2015,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_observe_visibility__WEBPACK_IMPORTED_MODULE_1__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = ({
+  mixins: [_mixins_strings_js__WEBPACK_IMPORTED_MODULE_2__["default"]],
   props: {
     manga: {},
     viewAs: {}
@@ -2030,31 +2055,12 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_observe_visibility__WEBPACK_I
   },
   computed: {},
   created: function created() {},
-  mounted: function mounted() {},
   methods: {
     visibilityChanged: function visibilityChanged(isVisible, entry) {
       //lazy load images
       if (isVisible) {
         this.isVisible = true;
       }
-    },
-    convertStatus: function convertStatus(status) {
-      return 'On Going';
-    },
-    formatNum: function formatNum(num) {
-      num = num.toString();
-
-      if (num.length == 4) {
-        return num[0] + ',' + num.substr(1, 3);
-      } else if (num.length == 5) {
-        return num.substr(0, 2) + ',' + num.substr(2, 4);
-      } else if (num.length == 6) {
-        return num.substr(0, 3) + ',' + num.substr(3, 5);
-      } else if (num.length == 7) {
-        return num[0] + ',' + num.substr(1, 3) + ',' + num.substr(4, 6);
-      }
-
-      return num;
     }
   }
 });
@@ -2070,6 +2076,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_observe_visibility__WEBPACK_I
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mixins_strings_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/strings.js */ "./resources/js/mixins/strings.js");
 //
 //
 //
@@ -2153,7 +2160,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  mixins: [_mixins_strings_js__WEBPACK_IMPORTED_MODULE_0__["default"]],
   props: {
     manga: {}
   },
@@ -2165,11 +2174,7 @@ __webpack_require__.r(__webpack_exports__);
         backgroundImage: 'url(' + (this.manga.imageURL ? this.manga.imageURL : 'https://cdn.mangaeden.com/mangasimg/' + this.manga.image) + ')'
       }
     };
-  },
-  computed: {},
-  created: function created() {},
-  mounted: function mounted() {},
-  methods: {}
+  }
 });
 
 /***/ }),
@@ -2238,7 +2243,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_fetcher_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/fetcher.js */ "./resources/js/mixins/fetcher.js");
-/* harmony import */ var _common_m_card_detail__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/m-card-detail */ "./resources/js/components/common/m-card-detail.vue");
+/* harmony import */ var _mixins_strings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/strings */ "./resources/js/mixins/strings.js");
+/* harmony import */ var _common_m_card_detail__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../common/m-card-detail */ "./resources/js/components/common/m-card-detail.vue");
 //
 //
 //
@@ -2378,12 +2384,51 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_mixins_fetcher_js__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  mixins: [_mixins_fetcher_js__WEBPACK_IMPORTED_MODULE_0__["default"], _mixins_strings__WEBPACK_IMPORTED_MODULE_1__["default"]],
   components: {
-    'm-card-detail': _common_m_card_detail__WEBPACK_IMPORTED_MODULE_1__["default"]
+    'm-card-detail': _common_m_card_detail__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   props: {
     cat: {}
@@ -2399,7 +2444,9 @@ __webpack_require__.r(__webpack_exports__);
       oldData: [],
       newData: [],
       catSlug: this.cat,
-      observer: null
+      observer: null,
+      currPage: 1,
+      perPage: 10
     };
   },
   mounted: function mounted() {
@@ -2415,7 +2462,7 @@ __webpack_require__.r(__webpack_exports__);
         manga.categories.forEach(function (cat) {
           var catObj = {
             name: cat,
-            slug: cat.replace(/ /g, '-').toLowerCase()
+            slug: _this.toSlug(cat)
           }; //see if this category is the chosen one
 
           if (catObj.slug == _this.catSlug) {
@@ -2435,17 +2482,32 @@ __webpack_require__.r(__webpack_exports__);
       });
 
       if (!catMangas.length) {
-        //take 20 TODO paginate, probably better to do with laravel
-        catMangas = mangas.slice(0, 20); // assume category is 'all', invalid or just has no manga, etc
+        if (_this.catSlug == 'hot') {
+          catMangas = mangas.sort(function (a, b) {
+            return b.hits - a.hits;
+          });
+          catMangas = catMangas.filter(function (a) {
+            return a.released >= 2018;
+          });
+        } else if (_this.catSlug == 'latest') {
+          catMangas = mangas.sort(function (a, b) {
+            return b.released - a.released;
+          });
+        } else {
+          catMangas = mangas; // assume category is 'all', invalid or just has no manga, etc
 
-        _this.catSlug = 'all';
-      } //sort by latest by default
+          _this.catSlug = 'all'; //sort by views by default
 
-
-      catMangas.sort(function (a, b) {
-        return a.last_chapter_date - b.last_chapter_date;
-      }); //take 20 TODO paginate, probably better to do with laravel
-      //this.mangas = catMangas.slice(0, 20);
+          catMangas.sort(function (a, b) {
+            return b.hits - a.hits;
+          });
+        }
+      } else {
+        //sort by views by default
+        catMangas.sort(function (a, b) {
+          return b.hits - a.hits;
+        });
+      }
 
       _this.mangas = catMangas;
       _this.loading = false;
@@ -2465,7 +2527,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_fetcher_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../mixins/fetcher.js */ "./resources/js/mixins/fetcher.js");
-/* harmony import */ var _page_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./page-container */ "./resources/js/components/pages/chapter-page/page-container.vue");
+/* harmony import */ var _mixins_strings_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../mixins/strings.js */ "./resources/js/mixins/strings.js");
+/* harmony import */ var _page_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./page-container */ "./resources/js/components/pages/chapter-page/page-container.vue");
 //
 //
 //
@@ -2597,12 +2660,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_mixins_fetcher_js__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  mixins: [_mixins_fetcher_js__WEBPACK_IMPORTED_MODULE_0__["default"], _mixins_strings_js__WEBPACK_IMPORTED_MODULE_1__["default"]],
   components: {
-    'page-container': _page_container__WEBPACK_IMPORTED_MODULE_1__["default"]
+    'page-container': _page_container__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   props: {
     slug: {},
@@ -2625,7 +2689,7 @@ __webpack_require__.r(__webpack_exports__);
     this.fetchMangaData().then(function (mangas) {
       //find manga
       mangas.forEach(function (manga) {
-        if (manga.title.replace(/ /g, '-').toLowerCase() == _this.slug) {
+        if (_this.toSlug(manga.title) == _this.slug) {
           _this.manga = manga;
         }
       });
@@ -2670,7 +2734,7 @@ __webpack_require__.r(__webpack_exports__);
         //find the chapter
         this.manga.chapters.forEach(function (chapter) {
           if (newVal == chapter.id) {
-            window.location.href = '/manga/' + _this2.manga.title.replace(/ /g, '-').toLowerCase() + '/chapter/' + chapter.num;
+            window.location.href = '/manga/' + _this2.toSlug(_this2.manga.title) + '/chapter/' + chapter.num;
           }
         });
       }
@@ -3025,7 +3089,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       mangaByLatestChapter: [],
       randomManga: [],
-      fetchedManga: [],
+      popularManga: [],
+      newManga: [],
+      trendingManga: [],
       tab: 'new',
       searchText: '',
       loading: false,
@@ -3039,18 +3105,39 @@ __webpack_require__.r(__webpack_exports__);
 
     this.loading = true;
     this.fetchMangaData().then(function (manga) {
-      //cut out manga that dont have chapters
+      //cut out manga that dont have chapters, as well as duplicates
+      var seenIds = [];
       manga = manga.filter(function (m) {
-        return m.chapters.length && m.title && (m.imageURL || m.image);
-      });
+        if (seenIds.indexOf(m.id) == -1) {
+          seenIds.push(m.id);
+          return m.chapters.length && m.title && (m.imageURL || m.image);
+        }
 
-      _this.pushToArray(_this.randomManga, manga.slice(0, 8));
+        return false;
+      });
+      var randomNum = Math.floor(Math.random() * 100 + 1) - 12;
+
+      _this.pushToArray(_this.randomManga, manga.slice(randomNum, randomNum + 12));
 
       _this.pushToArray(_this.mangaByLatestChapter, manga.sort(function (a, b) {
-        return a.last_chapter_date - b.last_chapter_date;
-      }).slice(0, 8));
+        return b.last_chapter_date - a.last_chapter_date;
+      }).slice(0, 12));
 
-      _this.pushToArray(_this.fetchedManga, manga.slice(10, 18));
+      _this.pushToArray(_this.popularManga, manga.sort(function (a, b) {
+        return b.hits - a.hits;
+      }).slice(0, 10));
+
+      _this.pushToArray(_this.newManga, manga.sort(function (a, b) {
+        return b.released - a.released;
+      }).slice(0, 10));
+
+      var trending = manga.sort(function (a, b) {
+        return b.hits - a.hits;
+      });
+
+      _this.pushToArray(_this.trendingManga, trending.filter(function (a) {
+        return a.released >= 2018;
+      }).slice(0, 10));
 
       _this.loading = false;
     });
@@ -3082,6 +3169,12 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_fetcher_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/fetcher.js */ "./resources/js/mixins/fetcher.js");
+/* harmony import */ var _mixins_strings_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/strings.js */ "./resources/js/mixins/strings.js");
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3280,8 +3373,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_mixins_fetcher_js__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  mixins: [_mixins_fetcher_js__WEBPACK_IMPORTED_MODULE_0__["default"], _mixins_strings_js__WEBPACK_IMPORTED_MODULE_1__["default"]],
   props: {
     slug: {}
   },
@@ -3290,15 +3384,13 @@ __webpack_require__.r(__webpack_exports__);
       manga: null
     };
   },
-  computed: {},
-  created: function created() {},
   mounted: function mounted() {
     var _this = this;
 
     this.fetchMangaData().then(function (mangas) {
       //find manga
       mangas.forEach(function (manga) {
-        if (manga.title.replace(/ /g, '-').toLowerCase() == _this.slug) {
+        if (_this.toSlug(manga.title) == _this.slug) {
           _this.manga = manga;
         }
       });
@@ -3307,26 +3399,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log('Not Found');
       }
     });
-  },
-  methods: {
-    convertStatus: function convertStatus(status) {
-      return 'On Going';
-    },
-    formatNum: function formatNum(num) {
-      num = num.toString();
-
-      if (num.length == 4) {
-        return num[0] + ',' + num.substr(1, 3);
-      } else if (num.length == 5) {
-        return num.substr(0, 2) + ',' + num.substr(2, 4);
-      } else if (num.length == 6) {
-        return num.substr(0, 3) + ',' + num.substr(3, 5);
-      } else if (num.length == 7) {
-        return num[0] + ',' + num.substr(1, 3) + ',' + num.substr(4, 6);
-      }
-
-      return num;
-    }
   }
 });
 
@@ -7808,7 +7880,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.m-content[data-v-c78a2a16] {\n  padding:10px;\n}\n.p[data-v-c78a2a16] {\n  margin-bottom:5px;\n}\n.m-content.list .m-category[data-v-c78a2a16],\n.m-content.list .m-title[data-v-c78a2a16] {\n  display:none;\n}\n.m-title.list[data-v-c78a2a16] {\n  padding-left: 5px;\n  padding-top: 5px;\n}\n.m-title[data-v-c78a2a16] {\n  font-weight:bold;\n  border-bottom:1px solid white;\n}\n.m-title[data-v-c78a2a16]:hover {\n  color:#dcf836;\n  cursor:pointer;\n}\n.m-title a[data-v-c78a2a16] {\n  color: inherit;\n  text-decoration: inherit;\n}\n/*Small devices*/\n@media (min-width: 600px) {\n}\n/*Medium devices*/\n@media (min-width: 1439px) {\n}\n/*Large devices*/\n@media (min-width: 1919px) {\n}\n", ""]);
+exports.push([module.i, "\n.m-content[data-v-c78a2a16] {\n  padding:0px 10px;\n}\np[data-v-c78a2a16] {\n  margin-bottom:5px;\n  display:inline-block;\n}\n.m-content.list .m-title[data-v-c78a2a16] {\n  display:none;\n}\n.m-title.list[data-v-c78a2a16] {\n  padding-left: 5px;\n  padding-top: 5px;\n}\n.m-title[data-v-c78a2a16] {\n  display: block;\n  font-weight:bold;\n  border-bottom:1px solid white;\n}\n.m-title[data-v-c78a2a16]:hover {\n  color:#dcf836;\n  cursor:pointer;\n}\n.m-title a[data-v-c78a2a16] {\n  color: inherit;\n  text-decoration: inherit;\n}\n.paddout[data-v-c78a2a16] {\n  height:270px;\n  background:#1a2b3c;\n}\n.paddout.image[data-v-c78a2a16] {\n  margin: 5px;\n}\n/*Small devices*/\n@media (min-width: 600px) {\n}\n/*Medium devices*/\n@media (min-width: 1439px) {\n.m-content[data-v-c78a2a16] {\n    padding:10px;\n}\n}\n/*Large devices*/\n@media (min-width: 1919px) {\n}\n", ""]);
 
 // exports
 
@@ -7865,7 +7937,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.category-container[data-v-67bbd110] {\n  margin-top: 15px;\n  color:white;\n  font-family: 'Dosis', sans-serif;\n}\n.category-links[data-v-67bbd110] {\n  padding:15px;\n  background:#0f2133;\n  border: 3px solid #233a50;\n}\n.category-links div[data-v-67bbd110] {\n  padding:5px;\n  font-family: 'Dosis', sans-serif;\n  font-weight: bold;\n  text-transform: uppercase;\n}\n.category-links a[data-v-67bbd110] {\n  color:white;\n  text-decoration:none;\n}\n.category-links a[data-v-67bbd110]:hover {\n  text-decoration: underline;\n}\n.categories-list[data-v-67bbd110] {\n  text-decoration:none;\n  color:#abb7c4;\n  font-size: 13px;\n  font-weight: bold;\n  text-transform: uppercase;\n}\n.categories-list .list-container[data-v-67bbd110], .mangas-container[data-v-67bbd110] {\n  background-color: #0b1a2a;\n  border: 3px solid #0f2133;\n}\n.list-container a[data-v-67bbd110] {\n  color: inherit;\n  text-decoration: inherit;\n}\n.list-container.cutoff[data-v-67bbd110] {\n  max-height: 50vh;\n  overflow: hidden;\n}\n.allcats-link[data-v-67bbd110] {\n  background:rgb(35, 58, 80);\n  font-size:24px;\n}\nh1[data-v-67bbd110] {\n  font-weight: bold;\n  text-transform: uppercase;\n  font-size:25px;\n}\nh5[data-v-67bbd110] {\n  margin: 30px;\n  padding: 15px;\n  border-bottom: 2px solid;\n  text-align: center;\n}\n.mangas-container[data-v-67bbd110] {\n  padding:15px;\n  border-radius:10px;\n}\n.manga-wrap[data-v-67bbd110] {\n  padding: 5px;\n  border: 1px solid #233a50;\n  margin: 10px 0;\n  background:#172533;\n}\n\n/*Small devices*/\n@media (min-width: 600px) {\n.category-container[data-v-67bbd110] {\n    padding-left: 15px;\n    padding-right: 15px;\n}\n}\n/*Medium devices*/\n@media (min-width: 1439px) {\n.category-container[data-v-67bbd110] {\n    margin:0 auto;\n    width: 1170px;\n}\n}\n/*Large devices*/\n@media (min-width: 1919px) {\n}\n", ""]);
+exports.push([module.i, "\n.category-container[data-v-67bbd110] {\n  margin-top: 15px;\n  color:white;\n  font-family: 'Dosis', sans-serif;\n}\n.category-links[data-v-67bbd110] {\n  padding:15px;\n  background:#0f2133;\n  border: 3px solid #233a50;\n}\n.category-links div[data-v-67bbd110] {\n  padding:5px;\n  font-family: 'Dosis', sans-serif;\n  font-weight: bold;\n  text-transform: uppercase;\n}\n.category-links a[data-v-67bbd110] {\n  color:white;\n  text-decoration:none;\n}\n.category-links a[data-v-67bbd110]:hover {\n  text-decoration: underline;\n}\n.categories-list[data-v-67bbd110] {\n  text-decoration:none;\n  color:#abb7c4;\n  font-size: 13px;\n  font-weight: bold;\n  text-transform: uppercase;\n}\n.categories-list .list-container[data-v-67bbd110], .mangas-container[data-v-67bbd110] {\n  background-color: #0b1a2a;\n  border: 3px solid #0f2133;\n}\n.list-container a[data-v-67bbd110] {\n  color: inherit;\n  text-decoration: inherit;\n}\n.list-container.cutoff[data-v-67bbd110] {\n  max-height: 50vh;\n  overflow: hidden;\n}\n.allcats-link[data-v-67bbd110] {\n  background:rgb(35, 58, 80);\n  font-size:24px;\n}\nh1[data-v-67bbd110] {\n  font-weight: bold;\n  text-transform: uppercase;\n  font-size:25px;\n}\nh5[data-v-67bbd110] {\n  margin: 30px;\n  padding: 15px;\n  border-bottom: 2px solid;\n  text-align: center;\n}\n.mangas-container[data-v-67bbd110] {\n  min-height:100vh;\n  padding:15px;\n  border-radius:10px;\n  margin-top: 15px;\n}\n.manga-wrap[data-v-67bbd110] {\n  padding: 5px;\n  border: 1px solid #233a50;\n  margin: 10px 0;\n  background:#172533;\n  max-width: 100%;\n  overflow: hidden;\n}\n.spinner-container[data-v-67bbd110] {\n  height:100vh;\n}\n\n/*Small devices*/\n@media (min-width: 600px) {\n.category-container[data-v-67bbd110] {\n    padding-left: 15px;\n    padding-right: 15px;\n}\n}\n/*Medium devices*/\n@media (min-width: 1439px) {\n.category-container[data-v-67bbd110] {\n    margin:0 auto;\n    width: 1170px;\n}\n}\n/*Large devices*/\n@media (min-width: 1919px) {\n}\n", ""]);
 
 // exports
 
@@ -75842,49 +75914,51 @@ var render = function() {
         "div",
         { class: ["img-contain", _vm.viewAs == "list" ? "hidden" : "col"] },
         [
-          _c("img", {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.isVisible,
-                expression: "isVisible"
-              }
-            ],
-            attrs: {
-              src: "https://cdn.mangaeden.com/mangasimg/" + _vm.manga.image,
-              width: "100%"
-            }
-          })
+          _vm.isVisible && _vm.manga
+            ? _c("img", {
+                attrs: {
+                  src: "https://cdn.mangaeden.com/mangasimg/" + _vm.manga.image,
+                  width: "100%"
+                }
+              })
+            : +_vm.manga && !_vm.isVisible
+            ? _c(
+                "div",
+                { staticClass: "row justify-center items-center" },
+                [
+                  _c("q-spinner-cube", {
+                    attrs: { color: "indigo", size: "2rem" }
+                  })
+                ],
+                1
+              )
+            : _c("div", { staticClass: "paddout image" })
         ]
       ),
       _vm._v(" "),
-      _c(
-        "p",
-        {
-          directives: [
+      _vm.manga
+        ? _c(
+            "p",
             {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.viewAs == "list",
-              expression: "viewAs == 'list'"
-            }
-          ],
-          staticClass: "m-title list col-12"
-        },
-        [
-          _c(
-            "a",
-            {
-              attrs: {
-                href:
-                  "/manga/" + _vm.manga.title.replace(/ /g, "-").toLowerCase()
-              }
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.viewAs == "list",
+                  expression: "viewAs == 'list'"
+                }
+              ],
+              staticClass: "m-title list col-12"
             },
-            [_vm._v(_vm._s(_vm.manga.title))]
+            [
+              _c(
+                "a",
+                { attrs: { href: "/manga/" + _vm.toString(_vm.manga.title) } },
+                [_vm._v(_vm._s(_vm.manga.title))]
+              )
+            ]
           )
-        ]
-      ),
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "div",
@@ -75892,62 +75966,88 @@ var render = function() {
           class: [
             "m-content",
             _vm.viewAs,
-            _vm.viewAs == "list" ? "row justify-around col-12" : "col"
+            _vm.viewAs == "list" ? "row col-12" : "col"
           ]
         },
         [
-          _c("p", { staticClass: "m-title" }, [
-            _c(
-              "a",
-              {
-                attrs: {
-                  href:
-                    "/manga/" + _vm.manga.title.replace(/ /g, "-").toLowerCase()
-                }
-              },
-              [_vm._v(_vm._s(_vm.manga.title))]
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "p",
-            { staticClass: "m-hits" },
-            [
-              _c("q-icon", { attrs: { name: "remove_red_eye" } }),
-              _vm._v(" " + _vm._s(_vm.formatNum(_vm.manga.hits)))
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _vm.manga.categories.length
-            ? _c(
-                "p",
-                { staticClass: "m-category" },
-                [
-                  _c("q-icon", { attrs: { name: "category" } }),
-                  _vm._v(" "),
-                  _vm._l(_vm.manga.categories, function(c, i) {
-                    return i < 2
-                      ? _c("span", { key: _vm.manga.id + "c" + c }, [
-                          _vm._v(
-                            "\n        " +
-                              _vm._s(c) +
-                              _vm._s(i < 1 && c.length > 1 ? "/" : "") +
-                              "\n      "
-                          )
-                        ])
-                      : _vm._e()
-                  })
-                ],
-                2
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _c("p", { staticClass: "m-lt" }),
-          _vm._v(" "),
-          _c("p", { staticClass: "m-status" }, [
-            _vm._v(_vm._s(_vm.convertStatus(_vm.manga.status)))
-          ])
+          _vm.manga
+            ? _c("span", [
+                _c("p", { staticClass: "m-title" }, [
+                  _c(
+                    "a",
+                    {
+                      attrs: { href: "/manga/" + _vm.toSlug(_vm.manga.title) }
+                    },
+                    [_vm._v(_vm._s(_vm.manga.title))]
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "p",
+                  { staticClass: "m-hits" },
+                  [
+                    _c("q-icon", {
+                      attrs: { color: "lime-14", name: "remove_red_eye" }
+                    }),
+                    _vm._v(" " + _vm._s(_vm.formatNum(_vm.manga.hits)))
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "p",
+                  { staticClass: "m-chapters" },
+                  [
+                    _c("q-icon", { attrs: { color: "lime-14", name: "book" } }),
+                    _vm._v(" " + _vm._s(_vm.manga.chapters_len) + "\n      ")
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "p",
+                  { staticClass: "m-status" },
+                  [
+                    _c("q-icon", {
+                      attrs: { color: "lime-14", name: "graphic_eq" }
+                    }),
+                    _vm._v(
+                      "\n        " +
+                        _vm._s(_vm.convertStatus(_vm.manga.status)) +
+                        "\n      "
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "p",
+                  { staticClass: "m-released" },
+                  [
+                    _c("q-icon", {
+                      attrs: { color: "lime-14", name: "calendar_today" }
+                    }),
+                    _vm._v(
+                      "\n        " +
+                        _vm._s(_vm.manga.released ? _vm.manga.released : "?") +
+                        "\n      "
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("span", {
+                  staticClass: "m-desc row col-xs-12",
+                  domProps: {
+                    innerHTML: _vm._s(
+                      _vm.manga.description.length > 150
+                        ? _vm.manga.description.substr(0, 150) + "..."
+                        : _vm.manga.description
+                    )
+                  }
+                })
+              ])
+            : _c("div", { staticClass: "paddout content" })
         ]
       )
     ]
@@ -75990,53 +76090,30 @@ var render = function() {
       }
     },
     [
-      _c(
-        "a",
-        {
-          attrs: {
-            href: "/manga/" + _vm.manga.title.replace(/ /g, "-").toLowerCase()
-          }
-        },
-        [
-          _c("div", { staticClass: "overlay column justify-end" }, [
-            _c("div", { staticClass: "content" }, [
-              _c("h5", { class: ["title", _vm.hovering ? "hovering" : ""] }, [
-                _vm._v(_vm._s(_vm.manga.title))
-              ]),
-              _vm._v(" "),
-              _vm.manga.categories.length
-                ? _c("p", { staticClass: "category" }, [
-                    _c(
-                      "span",
-                      {
-                        class: _vm.manga.categories[0]
-                          .replace(/ /g, "-")
-                          .toLowerCase()
-                      },
-                      [_vm._v(_vm._s(_vm.manga.categories[0]))]
-                    )
+      _c("div", { staticClass: "overlay column justify-end" }, [
+        _c("a", { attrs: { href: "/manga/" + _vm.toSlug(_vm.manga.title) } }, [
+          _c("div", { staticClass: "content" }, [
+            _c("h5", { class: ["title", _vm.hovering ? "hovering" : ""] }, [
+              _vm._v(_vm._s(_vm.manga.title))
+            ]),
+            _vm._v(" "),
+            _vm.manga.categories.length
+              ? _c("p", { staticClass: "category" }, [
+                  _c("span", { class: _vm.toSlug(_vm.manga.categories[0]) }, [
+                    _vm._v(_vm._s(_vm.manga.categories[0]))
                   ])
-                : _vm._e(),
-              _vm._v(" "),
-              _c(
-                "p",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: false,
-                      expression: "false"
-                    }
-                  ],
-                  staticClass: "chapterDate"
-                },
-                [_vm._v(_vm._s(_vm.manga.last_chapter_date))]
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("p", { staticClass: "chapterDate" }, [
+              _vm._v(
+                "Updated: " +
+                  _vm._s(_vm.formatDate(_vm.manga.last_chapter_date))
               )
             ])
           ])
-        ]
-      )
+        ])
+      ])
     ]
   )
 }
@@ -76133,12 +76210,7 @@ var render = function() {
             _vm._v(" "),
             _c(
               "a",
-              {
-                attrs: {
-                  href:
-                    "/manga/categories/" + cat.replace(/ /g, "-").toLowerCase()
-                }
-              },
+              { attrs: { href: "/manga/categories/" + _vm.toSlug(cat) } },
               [_vm._v(_vm._s(cat))]
             )
           ],
@@ -76153,7 +76225,7 @@ var render = function() {
         "h1",
         [
           _c("q-icon", { attrs: { name: "label", color: "red-13" } }),
-          _vm._v(" " + _vm._s(_vm.catSlug.replace(/-/g, " ").toUpperCase()))
+          _vm._v(" " + _vm._s(_vm.normalize(_vm.catSlug)))
         ],
         1
       ),
@@ -76202,17 +76274,102 @@ var render = function() {
       _vm._v(" "),
       _c(
         "div",
-        { staticClass: "row" },
-        _vm._l(_vm.mangas, function(manga) {
+        { staticClass: "row justify-center" },
+        [
+          _c("q-pagination", {
+            attrs: {
+              color: "teal",
+              max: parseInt((_vm.mangas.length / _vm.perPage).toFixed(0)),
+              "max-pages": 4,
+              "direction-links": true
+            },
+            model: {
+              value: _vm.currPage,
+              callback: function($$v) {
+                _vm.currPage = $$v
+              },
+              expression: "currPage"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.loading,
+              expression: "loading"
+            }
+          ],
+          staticClass: "row"
+        },
+        _vm._l(10, function(fakeManga, i) {
           return _c("m-card-detail", {
-            key: "catmanga" + manga.id,
+            key: "fakeManga" + i,
             class: [
               "manga-wrap row",
-              _vm.viewAs == "grid" ? "col-xs-12 col-sm-6 col-md-4" : "col-12"
+              _vm.viewAs == "grid" ? "col-xs-12 col-sm-6" : "col-12"
             ],
-            attrs: { manga: manga, "view-as": _vm.viewAs }
+            attrs: { manga: null, "view-as": _vm.viewAs }
           })
         }),
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: !_vm.loading,
+              expression: "!loading"
+            }
+          ],
+          staticClass: "row"
+        },
+        _vm._l(_vm.mangas, function(manga, i) {
+          return i + 1 < _vm.currPage * _vm.perPage + 1 &&
+            i + 1 > _vm.currPage * _vm.perPage - 9
+            ? _c("m-card-detail", {
+                key: "catmanga" + manga.id,
+                class: [
+                  "manga-wrap row",
+                  _vm.viewAs == "grid" ? "col-xs-12 col-sm-6" : "col-12"
+                ],
+                attrs: { manga: manga, "view-as": _vm.viewAs }
+              })
+            : _vm._e()
+        }),
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "row justify-center" },
+        [
+          _c("q-pagination", {
+            attrs: {
+              color: "teal",
+              max: parseInt((_vm.mangas.length / _vm.perPage).toFixed(0)),
+              "max-pages": 4,
+              "direction-links": true
+            },
+            model: {
+              value: _vm.currPage,
+              callback: function($$v) {
+                _vm.currPage = $$v
+              },
+              expression: "currPage"
+            }
+          })
+        ],
         1
       )
     ]),
@@ -77055,10 +77212,13 @@ var render = function() {
                           perPageCustom: [[768, 3], [1024, 4]]
                         }
                       },
-                      _vm._l(_vm.fetchedManga, function(manga) {
+                      _vm._l(_vm.newManga, function(manga, i) {
                         return _c(
                           "slide",
-                          { key: "new" + manga.id, staticClass: "slide" },
+                          {
+                            key: "new" + manga.id + "" + i,
+                            staticClass: "slide"
+                          },
                           [_c("manga-card", { attrs: { manga: manga } })],
                           1
                         )
@@ -77109,7 +77269,7 @@ var render = function() {
                           perPageCustom: [[768, 3], [1024, 4]]
                         }
                       },
-                      _vm._l(_vm.fetchedManga, function(manga) {
+                      _vm._l(_vm.trendingManga, function(manga) {
                         return _c(
                           "slide",
                           { key: "trending" + manga.id, staticClass: "slide" },
@@ -77163,10 +77323,13 @@ var render = function() {
                           perPageCustom: [[768, 3], [1024, 4]]
                         }
                       },
-                      _vm._l(_vm.fetchedManga, function(manga) {
+                      _vm._l(_vm.popularManga, function(manga, i) {
                         return _c(
                           "slide",
-                          { key: "popular" + manga.id, staticClass: "slide" },
+                          {
+                            key: "popular" + manga.id + "" + i,
+                            staticClass: "slide"
+                          },
                           [_c("manga-card", { attrs: { manga: manga } })],
                           1
                         )
@@ -77283,10 +77446,13 @@ var render = function() {
                     "div",
                     _vm._l(_vm.manga.aka, function(aka, i) {
                       return _c("span", { key: aka }, [
-                        _vm._v(
-                          _vm._s(aka) +
+                        _c("span", { domProps: { innerHTML: _vm._s(aka) } }),
+                        _vm._v(" "),
+                        _c("span", [
+                          _vm._v(
                             _vm._s(i !== _vm.manga.aka.length - 1 ? ", " : "")
-                        )
+                          )
+                        ])
                       ])
                     }),
                     0
@@ -77362,10 +77528,13 @@ var render = function() {
                 _c(
                   "div",
                   { staticClass: "category" },
-                  _vm._l(_vm.manga.categories, function(c) {
+                  _vm._l(_vm.manga.categories, function(c, i) {
                     return _c(
                       "span",
-                      { key: c, class: c.replace(/ /g, "-").toLowerCase() },
+                      {
+                        key: c + "" + i,
+                        class: c.replace(/ /g, "-").toLowerCase()
+                      },
                       [_vm._v(_vm._s(c))]
                     )
                   }),
@@ -77466,9 +77635,7 @@ var render = function() {
                               attrs: {
                                 href:
                                   "/manga/" +
-                                  _vm.manga.title
-                                    .replace(/ /g, "-")
-                                    .toLowerCase() +
+                                  _vm.toSlug(_vm.manga.title) +
                                   "/chapter/" +
                                   chapter[0]
                               }
@@ -77533,7 +77700,7 @@ var render = function() {
                                     name: "calendar_today"
                                   }
                                 }),
-                                _vm._v(" " + _vm._s(chapter[1]))
+                                _vm._v(" " + _vm._s(_vm.formatDate(chapter[1])))
                               ],
                               1
                             )
@@ -90832,6 +90999,61 @@ __webpack_require__.r(__webpack_exports__);
           });
         });
       });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/mixins/strings.js":
+/*!****************************************!*\
+  !*** ./resources/js/mixins/strings.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  methods: {
+    convertStatus: function convertStatus(status) {
+      return 'On Going';
+    },
+    formatNum: function formatNum(num) {
+      num = num.toString();
+
+      if (num.length == 4) {
+        return num[0] + ',' + num.substr(1, 3);
+      } else if (num.length == 5) {
+        return num.substr(0, 2) + ',' + num.substr(2, 4);
+      } else if (num.length == 6) {
+        return num.substr(0, 3) + ',' + num.substr(3, 5);
+      } else if (num.length == 7) {
+        return num[0] + ',' + num.substr(1, 3) + ',' + num.substr(4, 6);
+      } else if (num.length == 8) {
+        return num[0] + '' + num[1] + 'M+';
+      } else if (num.length == 9) {
+        return num[0] + '' + num[1] + num[2] + 'M+';
+      } else if (num.length == 10) {
+        return num[0] + 'B+';
+      }
+
+      return num;
+    },
+    toSlug: function toSlug(str) {
+      return str.replace(/ /g, '-').toLowerCase();
+    },
+    normalize: function normalize(str) {
+      return str.replace(/-/g, ' ').toUpperCase();
+    },
+    formatDate: function formatDate(unix) {
+      var a = new Date(unix * 1000);
+      var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      var year = a.getFullYear();
+      var month = months[a.getMonth()];
+      var date = a.getDate();
+      var time = date + ' ' + month + ' ' + year;
+      return time;
     }
   }
 });

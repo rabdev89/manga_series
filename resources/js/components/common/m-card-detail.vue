@@ -1,11 +1,11 @@
 <style scoped>
   .m-content {
-    padding:10px;
+    padding:0px 10px;
   }
-  .p {
+  p {
     margin-bottom:5px;
+    display:inline-block;
   }
-  .m-content.list .m-category,
   .m-content.list .m-title {
     display:none;
   }
@@ -14,6 +14,7 @@
     padding-top: 5px;
   }
   .m-title {
+    display: block;
     font-weight:bold;
     border-bottom:1px solid white;
   }
@@ -25,11 +26,21 @@
     color: inherit;
     text-decoration: inherit;
   }
+  .paddout {
+    height:270px;
+    background:#1a2b3c;
+  }
+  .paddout.image {
+    margin: 5px;
+  }
   /*Small devices*/
   @media (min-width: 600px) {
   }
   /*Medium devices*/
   @media (min-width: 1439px) {
+    .m-content {
+      padding:10px;
+    }
   }
   /*Large devices*/
   @media (min-width: 1919px) {
@@ -38,20 +49,31 @@
 <template>
   <div v-observe-visibility="visibilityChanged">
     <div :class="['img-contain', viewAs == 'list' ? 'hidden' : 'col']">
-      <img v-show="isVisible" :src="'https://cdn.mangaeden.com/mangasimg/'+manga.image" width="100%"/>
+      <img v-if="isVisible && manga" :src="'https://cdn.mangaeden.com/mangasimg/'+manga.image" width="100%"/>
+      <div v-else-if="+manga && !isVisible" class="row justify-center items-center">
+        <q-spinner-cube color="indigo" size="2rem" />
+      </div>
+      <div v-else class="paddout image"></div>
     </div>
-    <p v-show="viewAs == 'list'" class="m-title list col-12"><a :href="'/manga/'+manga.title.replace(/ /g, '-').toLowerCase()">{{manga.title}}</a></p>
-    <div :class="['m-content', viewAs, viewAs == 'list' ? 'row justify-around col-12' : 'col']">
-      <p class="m-title"><a :href="'/manga/'+manga.title.replace(/ /g, '-').toLowerCase()">{{manga.title}}</a></p>
-      <p class="m-hits"><q-icon name="remove_red_eye"/> {{formatNum(manga.hits)}}</p>
-      <p class="m-category" v-if="manga.categories.length">
-        <q-icon name="category"/>
-        <span v-for="(c, i) in manga.categories" v-if="i < 2" :key="manga.id+'c'+c">
-          {{c}}{{i < 1 && c.length > 1 ? '/' : ''}}
-        </span>
-      </p>
-      <p class="m-lt"></p>
-      <p class="m-status">{{convertStatus(manga.status)}}</p>
+    <p v-if="manga" v-show="viewAs == 'list'" class="m-title list col-12"><a :href="'/manga/'+toString(manga.title)">{{manga.title}}</a></p>
+    <div :class="['m-content', viewAs, viewAs == 'list' ? 'row col-12' : 'col']">
+      <span v-if="manga">
+        <p class="m-title"><a :href="'/manga/'+toSlug(manga.title)">{{manga.title}}</a></p>
+        <p class="m-hits"><q-icon color="lime-14" name="remove_red_eye"/> {{formatNum(manga.hits)}}</p>
+        <p class="m-chapters">
+          <q-icon color="lime-14" name="book"/> {{manga.chapters_len}}
+        </p>
+        <p class="m-status">
+          <q-icon color="lime-14" name="graphic_eq"></q-icon>
+          {{convertStatus(manga.status)}}
+        </p>
+        <p class="m-released">
+          <q-icon color="lime-14" name="calendar_today"></q-icon>
+          {{manga.released ? manga.released : '?'}}
+        </p>
+        <span class="m-desc row col-xs-12" v-html="manga.description.length > 150 ? manga.description.substr(0, 150) +'...' : manga.description"></span>
+      </span>
+      <div v-else class="paddout content"></div>
     </div>
   </div>
 </template>
@@ -59,9 +81,12 @@
 <script>
 import Vue from 'vue';
 import VueObserveVisibility from 'vue-observe-visibility';
+import Strings from '../../mixins/strings.js';
 
 Vue.use(VueObserveVisibility);
+
 export default {
+  mixins: [Strings],
   props: {
     manga: {},
     viewAs: {},
@@ -74,29 +99,12 @@ export default {
   },
   computed: {},
   created() {},
-  mounted() {},
   methods: {
     visibilityChanged(isVisible, entry) {
       //lazy load images
       if(isVisible) {
         this.isVisible = true;
       }
-    },
-    convertStatus(status) {
-      return 'On Going';
-    },
-    formatNum(num) {
-      num = num.toString();
-      if(num.length == 4) {
-        return num[0]+','+num.substr(1, 3);
-      } else if(num.length == 5) {
-        return num.substr(0, 2) +','+num.substr(2, 4);
-      } else if(num.length == 6) {
-        return num.substr(0, 3) +','+num.substr(3, 5);
-      } else if(num.length == 7) {
-        return num[0] +','+num.substr(1, 3) +','+num.substr(4, 6);
-      }
-      return num;
     },
   }
 }

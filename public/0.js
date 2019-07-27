@@ -193,9 +193,11 @@ var render = function() {
               _vm._v("MANGA LIST")
             ]),
             _vm._v(" "),
-            _c("a", { attrs: { href: "/manga/hot" } }, [_vm._v("HOT MANGA")]),
+            _c("a", { attrs: { href: "/manga/categories/hot" } }, [
+              _vm._v("HOT MANGA")
+            ]),
             _vm._v(" "),
-            _c("a", { attrs: { href: "/latest" } }, [
+            _c("a", { attrs: { href: "/manga/categories/latest" } }, [
               _vm._v("LATEST RELEASES")
             ]),
             _vm._v(" "),

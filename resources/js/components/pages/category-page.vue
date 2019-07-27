@@ -60,14 +60,22 @@
   }
 
   .mangas-container {
+    min-height:100vh;
     padding:15px;
     border-radius:10px;
+    margin-top: 15px;
   }
   .manga-wrap {
     padding: 5px;
     border: 1px solid #233a50;
     margin: 10px 0;
     background:#172533;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .spinner-container {
+    height:100vh;
   }
 
   /*Small devices*/
@@ -94,27 +102,57 @@
     <div class="category-links row col-xs-12 justify-around gt-sm">
       <div v-for="cat in catsToShow" :key="'toplink'+cat" class="items-center">
         <q-icon name="label" color="red-13"></q-icon>
-        <a :href="'/manga/categories/'+cat.replace(/ /g, '-').toLowerCase()">{{cat}}</a>
+        <a :href="'/manga/categories/'+toSlug(cat)">{{cat}}</a>
       </div>
     </div>
     <!-- Manga of Category -->
     <div class="mangas-container col-xs-12 col-md-8">
-      <h1><q-icon name="label" color="red-13"></q-icon> {{catSlug.replace(/-/g,' ').toUpperCase()}}</h1>
+      <h1><q-icon name="label" color="red-13"></q-icon> {{normalize(catSlug)}}</h1>
       <div class="btns-row row justify-end">
         <q-btn-group push>
           <q-btn push :color="viewAs == 'grid' ? 'lime-14' : ''" size="md" @click="viewAs = 'grid'" icon="grid_on" />
           <q-btn push :color="viewAs == 'list' ? 'lime-14' : ''" size="md" @click="viewAs = 'list'" icon="view_list" />
         </q-btn-group>
       </div>
-      <div class="row">
+      <div class="row justify-center">
+        <q-pagination
+          v-model="currPage"
+          color="teal"
+          :max="parseInt((mangas.length / perPage).toFixed(0))"
+          :max-pages="4"
+          :direction-links="true"
+          >
+        </q-pagination>
+      </div>
+      <div v-show="loading" class="row">
+        <m-card-detail
+          v-for="(fakeManga, i) in 10"
+          :key="'fakeManga'+i"
+          :manga="null"
+          :view-as="viewAs"
+          :class="['manga-wrap row', viewAs == 'grid' ? 'col-xs-12 col-sm-6' : 'col-12']">
+        </m-card-detail>
+      </div>
+      <div v-show="!loading" class="row">
         <!-- Manga Items -->
         <m-card-detail
-          v-for="manga in mangas" 
+          v-for="(manga, i) in mangas"
+          v-if="((i + 1) < (currPage * perPage) + 1) && ((i + 1) > (currPage * perPage) - 9)"
           :key="'catmanga'+manga.id"
           :manga="manga"
           :view-as="viewAs"
-          :class="['manga-wrap row', viewAs == 'grid' ? 'col-xs-12 col-sm-6 col-md-4' : 'col-12']">
+          :class="['manga-wrap row', viewAs == 'grid' ? 'col-xs-12 col-sm-6' : 'col-12']">
         </m-card-detail>
+      </div>
+      <div class="row justify-center">
+        <q-pagination
+          v-model="currPage"
+          color="teal"
+          :max="parseInt((mangas.length / perPage).toFixed(0))"
+          :max-pages="4"
+          :direction-links="true"
+          >
+        </q-pagination>
       </div>
     </div>
     <!-- All Categories -->
@@ -139,9 +177,10 @@
 </template>
 <script>
 import Fetcher from '../../mixins/fetcher.js';
+import Strings from '../../mixins/strings';
 import MCardDetail from '../common/m-card-detail';
 export default {
-  mixins:[Fetcher],
+  mixins:[Fetcher, Strings],
   components: {
     'm-card-detail': MCardDetail,
   },
@@ -160,6 +199,8 @@ export default {
       newData: [],
       catSlug: this.cat,
       observer: null,
+      currPage:1,
+      perPage: 10,
     }
   },
   mounted() {
@@ -172,7 +213,7 @@ export default {
       mangas.forEach((manga) => {
         //extract categories
         manga.categories.forEach((cat) => {
-          let catObj = {name:cat,slug:cat.replace(/ /g, '-').toLowerCase()};
+          let catObj = {name:cat,slug:this.toSlug(cat)};
           //see if this category is the chosen one
           if(catObj.slug == this.catSlug) {
             catMangas.push(manga);
@@ -186,15 +227,22 @@ export default {
 
       this.categories.sort((a, b) => { return a.name - b.name});
       if(!catMangas.length) {
-        //take 20 TODO paginate, probably better to do with laravel
-        catMangas = mangas.slice(0,20);// assume category is 'all', invalid or just has no manga, etc
-        this.catSlug = 'all';
+        if(this.catSlug == 'hot') {
+          catMangas = mangas.sort((a, b) => { return b.hits - a.hits});
+          catMangas = catMangas.filter((a) => { return a.released >= 2018;});
+        } else if(this.catSlug == 'latest') {
+          catMangas = mangas.sort((a, b) => { return b.released - a.released; });
+        } else {
+          catMangas = mangas;// assume category is 'all', invalid or just has no manga, etc
+          this.catSlug = 'all';
+          //sort by views by default
+          catMangas.sort((a, b) => { return b.hits - a.hits});
+        }
+      } else {
+        //sort by views by default
+        catMangas.sort((a, b) => { return b.hits - a.hits});
       }
-      
-      //sort by latest by default
-      catMangas.sort((a, b) => { return a.last_chapter_date - b.last_chapter_date});
-      //take 20 TODO paginate, probably better to do with laravel
-      //this.mangas = catMangas.slice(0, 20);
+    
       this.mangas = catMangas;
       this.loading = false;
 

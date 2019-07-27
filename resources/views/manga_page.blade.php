@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', $slug)
+@section('title', ucfirst(str_replace('-',' ',$slug)))
 
 @section('content')
   <manga-page slug="{{$slug}}"></manga-page>

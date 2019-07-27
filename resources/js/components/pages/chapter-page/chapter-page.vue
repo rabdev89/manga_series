@@ -131,9 +131,12 @@
 
 <script>
 import Fetcher from '../../../mixins/fetcher.js';
+import Strings from '../../../mixins/strings.js';
+
 import PageContainer from './page-container';
+
 export default {
-  mixins:[Fetcher],
+  mixins:[Fetcher, Strings],
   components: {
     'page-container':PageContainer,
   },
@@ -156,7 +159,7 @@ export default {
     this.fetchMangaData().then(mangas => {
       //find manga
       mangas.forEach((manga) => {
-        if(manga.title.replace(/ /g, '-').toLowerCase() == this.slug) {
+        if(this.toSlug(manga.title) == this.slug) {
           this.manga = manga;
         }
       });
@@ -195,7 +198,7 @@ export default {
         //find the chapter
         this.manga.chapters.forEach((chapter) => {
           if(newVal == chapter.id) {
-            window.location.href = '/manga/'+this.manga.title.replace(/ /g, '-').toLowerCase()+'/chapter/'+chapter.num;
+            window.location.href = '/manga/'+this.toSlug(this.manga.title)+'/chapter/'+chapter.num;
           }
         });
 

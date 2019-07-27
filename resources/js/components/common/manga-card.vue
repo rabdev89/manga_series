@@ -69,20 +69,22 @@
 </style>
 <template>
   <div :class="['manga-card', hovering ? 'hovering' : '']" :style="img" @mouseenter="hovering = true" @mouseleave="hovering = false">
-    <a :href="'/manga/'+manga.title.replace(/ /g,'-').toLowerCase()">
-      <div class="overlay column justify-end">
+    <div class="overlay column justify-end">
+      <a :href="'/manga/'+toSlug(manga.title)">
         <div class="content">
           <h5 :class="['title', hovering ? 'hovering' : '']">{{manga.title}}</h5>
-          <p class="category" v-if="manga.categories.length"><span :class="manga.categories[0].replace(/ /g,'-').toLowerCase()">{{manga.categories[0]}}</span></p>
-          <p v-show="false" class="chapterDate">{{manga.last_chapter_date}}</p>
+          <p class="category" v-if="manga.categories.length"><span :class="toSlug(manga.categories[0])">{{manga.categories[0]}}</span></p>
+          <p class="chapterDate">Updated: {{formatDate(manga.last_chapter_date)}}</p>
         </div>
-      </div>
-    </a>
+      </a>
+    </div>
   </div>
 </template>
 
 <script>
+import Strings from '../../mixins/strings.js';
 export default {
+  mixins:[Strings],
   props: {
     manga: {},
   },
@@ -93,9 +95,5 @@ export default {
       img:{backgroundImage:'url('+(this.manga.imageURL ? this.manga.imageURL : 'https://cdn.mangaeden.com/mangasimg/'+this.manga.image)+')'}
     }
   },
-  computed: {},
-  created() {},
-  mounted() {},
-  methods: {}
 }
 </script>
