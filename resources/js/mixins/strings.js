@@ -1,7 +1,12 @@
 export default {
   methods: {
     convertStatus(status) {
-      return 'On Going';
+      if(status == 2) {
+        return 'Completed';
+      } else if(status == 1) {
+        return 'Ongoing';
+      }
+      return '?';
     },
     formatNum(num) {
       num = num.toString();
@@ -36,6 +41,41 @@ export default {
       var date = a.getDate();
       var time = date + ' ' + month + ' ' + year;
       return time;
+    },
+    //should be replaced with mySQL query
+    // is strict
+    advancedSearch(mangas, params) {
+      let results = [];
+      mangas.forEach((manga) => {
+        //merge title with aka
+        manga.aka.push(manga.title);
+        let matches = true;
+        let hasOneMatch = true;
+        params.forEach((param) => {
+          let key = Object.keys(param)[0];
+          param = param[key].toString().toLowerCase();
+          if(param && manga[key]) {
+            if(Array.isArray(manga[key])) {
+              hasOneMatch = false;
+              manga[key].forEach((val) => {
+                val = val.toString().toLowerCase();;
+                if(val.indexOf(param) !== -1) {
+                  hasOneMatch = true;
+                }
+              });
+            } else {
+              manga[key] = manga[key].toString().toLowerCase();
+              matches = manga[key].indexOf(param) !== -1;
+            }
+          } else {
+            matches = false;
+          }
+        });
+        if(matches && hasOneMatch) {
+          results.push(manga);
+        }
+      });
+      return results.sort((a, b) => { return b.hits - a.hits;});
     }
   }
 }

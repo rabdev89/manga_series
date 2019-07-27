@@ -44,7 +44,7 @@
         <a href="/manga/categories/all">MANGA LIST</a>
         <a href="/manga/categories/hot">HOT MANGA</a>
         <a href="/manga/categories/latest">LATEST RELEASES</a>
-        <a href="/search">ADVANCED SEARCH</a>
+        <a href="/advanced-search">ADVANCED SEARCH</a>
       </div>
       <!-- Hamburger Dropdown -->
       <q-btn-dropdown class="lt-md" flat icon="menu" menu-self="top right" icon-right :content-style="{width:'100vw'}">
@@ -56,17 +56,17 @@
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label><a href="/manga/hot">HOT MANGA</a></q-item-label>
+              <q-item-label><a href="/manga/categories/hot">HOT MANGA</a></q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label><a href="/latest">LATEST RELEASES</a></q-item-label>
+              <q-item-label><a href="/manga/categories/latest">LATEST RELEASES</a></q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label><a href="/search">ADVANCED SEARCH</a></q-item-label>
+              <q-item-label><a href="/advanced-search">ADVANCED SEARCH</a></q-item-label>
             </q-item-section>
           </q-item>
         </q-list>

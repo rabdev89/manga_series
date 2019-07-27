@@ -78,6 +78,16 @@
     height:100vh;
   }
 
+  .no-results {
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  h6 {
+    color: gray;
+    margin: 0;
+  }
   /*Small devices*/
   @media (min-width: 600px) {
     .category-container {
@@ -107,7 +117,10 @@
     </div>
     <!-- Manga of Category -->
     <div class="mangas-container col-xs-12 col-md-8">
-      <h1><q-icon name="label" color="red-13"></q-icon> {{normalize(catSlug)}}</h1>
+      <h1>
+        <q-icon name="label" color="red-13"></q-icon> 
+         {{normalize(catSlug)}}<span v-show="catSlug !== 'Search Results'"> Manga</span>
+      </h1>
       <div class="btns-row row justify-end">
         <q-btn-group push>
           <q-btn push :color="viewAs == 'grid' ? 'lime-14' : ''" size="md" @click="viewAs = 'grid'" icon="grid_on" />
@@ -137,12 +150,19 @@
         <!-- Manga Items -->
         <m-card-detail
           v-for="(manga, i) in mangas"
-          v-if="((i + 1) < (currPage * perPage) + 1) && ((i + 1) > (currPage * perPage) - 9)"
+          v-if="((i + 1) < (currPage * perPage) + 1) && ((i + 1) >= (currPage * perPage) - 9)"
           :key="'catmanga'+manga.id"
           :manga="manga"
           :view-as="viewAs"
           :class="['manga-wrap row', viewAs == 'grid' ? 'col-xs-12 col-sm-6' : 'col-12']">
         </m-card-detail>
+      </div>
+      <div v-show="!loading && !mangas.length" class="no-results">
+        <div class="img-contain text-center">
+          <img src='/img/shrug.png' width="25%" />
+        </div>
+        <h6 class="text-center">No Results Found.</h6>
+        <p class="text-center"><a href="/advanced-search" style="color:#dcf836">Go Back</a></p>
       </div>
       <div class="row justify-center">
         <q-pagination
@@ -186,6 +206,7 @@ export default {
   },
   props: {
     cat: {},
+    params:{},
   },
   data() {
     return {
@@ -232,6 +253,9 @@ export default {
           catMangas = catMangas.filter((a) => { return a.released >= 2018;});
         } else if(this.catSlug == 'latest') {
           catMangas = mangas.sort((a, b) => { return b.released - a.released; });
+        } else if(this.catSlug == 'Search Results') {
+          catMangas = this.advancedSearch(mangas, this.params);
+          console.log(catMangas);
         } else {
           catMangas = mangas;// assume category is 'all', invalid or just has no manga, etc
           this.catSlug = 'all';

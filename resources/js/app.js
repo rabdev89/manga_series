@@ -16,6 +16,7 @@ import HomePage from './components/pages/home-page';
 import CategoryPage from './components/pages/category-page';
 import MangaPage from './components/pages/manga-page';
 import ChapterPage from './components/pages/chapter-page/chapter-page';
+import AdvancedSearch from './components/pages/advanced-search';
 
 const app = new Vue({
   el: '#app',
@@ -25,6 +26,7 @@ const app = new Vue({
     'category-page':CategoryPage,
     'manga-page': MangaPage,
     'chapter-page':ChapterPage,
+    'advanced-search': AdvancedSearch,
     'search-bar':SearchBar,
   }
 });

@@ -9,6 +9,9 @@
       <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css">
       <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
       <style>
+        body {
+          background-color:#020d18;
+        }
         #app {
           background-color:#020d18;
           background-image: url('/img/background.jpg');
