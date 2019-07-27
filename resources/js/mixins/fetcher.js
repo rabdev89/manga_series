@@ -13,6 +13,15 @@ export default {
       return new Promise((resolve, reject) => axios.get('/data/mangaDetails.json').then(resp => {
         resolve(resp.data);
       }));
-    }
+    },
+    fetchChapterPages(id) {
+      return new Promise((resolve, reject) => {
+        axios.get('https://www.mangaeden.com/ajax/login/?username=mfinnigan&password=F655C2FgZB4cfqt').then(resp => {
+          axios.get('https://www.mangaeden.com/api/chapter/'+id).then(resp => {
+            resolve(resp.data.images);
+          });
+        });
+      });
+    },
   }
 };

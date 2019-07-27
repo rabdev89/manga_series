@@ -173,7 +173,7 @@
         <q-list bordered>
           <q-item v-for="(chapter, i) in manga.chapters" :key="'chapter'+chapter[3]" class="chapter-item" :style="i == 0 ? 'border-top:none' : ''">
             <q-item-section>
-              <a :href="'/manga/'+manga.id+'/chapter/'+chapter[3]">
+              <a :href="'/manga/'+manga.title.replace(/ /g, '-').toLowerCase()+'/chapter/'+chapter[0]">
                 <q-item-label v-if="chapter[0] != chapter[2]">
                   <q-icon color="primary" name="book"></q-icon>
                   #{{chapter[0]}} {{chapter[2]}}
