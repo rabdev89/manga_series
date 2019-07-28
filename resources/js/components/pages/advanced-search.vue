@@ -21,17 +21,9 @@
   }
   /*Small devices*/
   @media (min-width: 600px) {
-    .advanced-search-container {
-      padding-left: 15px;
-      padding-right: 15px;
-    }
   }
   /*Medium devices*/
   @media (min-width: 1439px) {
-    .advanced-search-container {
-      margin:0 auto;
-      width: 1170px;
-    }
   }
   /*Large devices*/
   @media (min-width: 1919px) {

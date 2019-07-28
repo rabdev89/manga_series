@@ -1,6 +1,8 @@
 <style scoped>
   .navbar-contain {
     background-color:#0f2133;
+    margin-right: -15px;
+    margin-left: -15px;
   }
   a {
     color: grey;
@@ -21,7 +23,8 @@
   @media (min-width: 600px) {
     .navbar-contain {
       background-color:transparent;
-      padding: 15px;
+      padding: 15px 0;
+      margin:0;
     }
   }
   /*Medium devices*/
@@ -47,6 +50,7 @@
       <div class="menu-items gt-sm">
         <a href="/manga/categories/all">MANGA LIST</a>
         <a href="/manga/categories/hot">HOT MANGA</a>
+        <a href="/manga/categories/new">NEW MANGA</a>
         <a href="/manga/categories/latest">LATEST RELEASES</a>
         <a href="/advanced-search">ADVANCED SEARCH</a>
       </div>
@@ -61,6 +65,11 @@
           <q-item>
             <q-item-section>
               <q-item-label><a href="/manga/categories/hot">HOT MANGA</a></q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item>
+            <q-item-section>
+              <q-item-label><a href="/manga/categories/new">NEW MANGA</a></q-item-label>
             </q-item-section>
           </q-item>
           <q-item>

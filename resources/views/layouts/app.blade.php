@@ -47,19 +47,38 @@
           text-align: center;
           font-size: 95%;
         }
+        
         /*Small devices*/
         @media (min-width: 600px) {
           #app {
             background-size:contain;
+          }
+          .container {
+            padding-left: 15px;
+            padding-right: 15px;
+          }
+        }
+        /*Medium devices*/
+        @media (min-width: 1022px) {
+          .container {
+            margin:0 auto;
+            width: 970px;
+          }
+        }
+        /*Large devices*/
+        @media (min-width: 1919px) {
+          .container {
+            margin:0 auto;
+            width: 1170px;
           }
         }
       </style>
   </head>
   <body>
     <div id="app">
-      <nav-bar></nav-bar>
-      <search-bar></search-bar>
       <div class="container">
+        <nav-bar></nav-bar>
+        <search-bar></search-bar>
         @yield('content')
       </div>
       <footer>
