@@ -4,12 +4,16 @@
     height:400px;
     background-repeat: no-repeat;
     background-size: cover;
+    transition: all 1s;
+  }
+  .manga-card.hovering {
+    transform: scale(1.1);
   }
   .overlay {
     width:100%;
     height:100%;
     background-color:transparent;
-    background-color: #00000087;
+    background-color: #00000047;
   }
   .title {
     margin: 10px 0px;

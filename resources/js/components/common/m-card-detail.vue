@@ -45,37 +45,53 @@
   /*Large devices*/
   @media (min-width: 1919px) {
   }
+  .fade-enter-active {
+    animation: go 0.7s;
+    animation-delay:0.3s;
+    opacity: 0;
+  }
+
+  @keyframes go {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 </style>
 <template>
-  <div v-observe-visibility="visibilityChanged">
-    <div :class="['img-contain', viewAs == 'list' ? 'hidden' : 'col']">
-      <img v-if="isVisible && manga" :src="'https://cdn.mangaeden.com/mangasimg/'+manga.image" width="100%"/>
-      <div v-else-if="+manga && !isVisible" class="row justify-center items-center">
-        <q-spinner-cube color="indigo" size="2rem" />
+  <transition appear appear-active-class="fade-enter-active">
+    <div v-observe-visibility="visibilityChanged">
+      <div :class="['img-contain', viewAs == 'list' ? 'hidden' : 'col']">
+        <img v-if="isVisible && manga" :src="'https://cdn.mangaeden.com/mangasimg/'+manga.image" width="100%"/>
+        <div v-else-if="+manga && !isVisible" class="row justify-center items-center">
+          <q-spinner-cube color="indigo" size="2rem" />
+        </div>
+        <div v-else class="paddout image"></div>
       </div>
-      <div v-else class="paddout image"></div>
+      <p v-if="manga" v-show="viewAs == 'list'" class="m-title list col-12"><a :href="'/manga/'+toString(manga.title)">{{manga.title}}</a></p>
+      <div :class="['m-content', viewAs, viewAs == 'list' ? 'row col-12' : 'col']">
+        <span v-if="manga">
+          <p class="m-title"><a :href="'/manga/'+toSlug(manga.title)">{{manga.title}}</a></p>
+          <p class="m-hits"><q-icon color="lime-14" name="remove_red_eye"/> {{formatNum(manga.hits)}}</p>
+          <p class="m-chapters">
+            <q-icon color="lime-14" name="book"/> {{manga.chapters_len}}
+          </p>
+          <p class="m-status">
+            <q-icon color="lime-14" name="graphic_eq"></q-icon>
+            {{convertStatus(manga.status)}}
+          </p>
+          <p class="m-released">
+            <q-icon color="lime-14" name="calendar_today"></q-icon>
+            {{manga.released ? manga.released : '?'}}
+          </p>
+          <span class="m-desc row col-xs-12" v-html="manga.description.length > 150 ? manga.description.substr(0, 150) +'...' : manga.description"></span>
+        </span>
+        <div v-else class="paddout content"></div>
+      </div>
     </div>
-    <p v-if="manga" v-show="viewAs == 'list'" class="m-title list col-12"><a :href="'/manga/'+toString(manga.title)">{{manga.title}}</a></p>
-    <div :class="['m-content', viewAs, viewAs == 'list' ? 'row col-12' : 'col']">
-      <span v-if="manga">
-        <p class="m-title"><a :href="'/manga/'+toSlug(manga.title)">{{manga.title}}</a></p>
-        <p class="m-hits"><q-icon color="lime-14" name="remove_red_eye"/> {{formatNum(manga.hits)}}</p>
-        <p class="m-chapters">
-          <q-icon color="lime-14" name="book"/> {{manga.chapters_len}}
-        </p>
-        <p class="m-status">
-          <q-icon color="lime-14" name="graphic_eq"></q-icon>
-          {{convertStatus(manga.status)}}
-        </p>
-        <p class="m-released">
-          <q-icon color="lime-14" name="calendar_today"></q-icon>
-          {{manga.released ? manga.released : '?'}}
-        </p>
-        <span class="m-desc row col-xs-12" v-html="manga.description.length > 150 ? manga.description.substr(0, 150) +'...' : manga.description"></span>
-      </span>
-      <div v-else class="paddout content"></div>
-    </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -97,8 +113,6 @@ export default {
       observer: null,
     }
   },
-  computed: {},
-  created() {},
   methods: {
     visibilityChanged(isVisible, entry) {
       //lazy load images

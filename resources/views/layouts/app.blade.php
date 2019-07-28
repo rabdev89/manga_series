@@ -18,6 +18,8 @@
           background-repeat:no-repeat;
           background-size: auto;
           min-height:100vh;
+          position: relative;
+          padding-bottom:115px;
         }
         .container {
           margin-right: auto;
@@ -29,9 +31,21 @@
           text-decoration: inherit;
           color:inherit;
         } 
-        a:hover {
+        a:hover, footer a {
           text-decoration: underline;
           color:#dcf836;
+        }
+        footer {
+          position:absolute;
+          bottom:0;
+          background-color: #0b1a2a;
+          border-top: 1px solid #172533;
+          color: white;
+          width: 100%;
+          padding: 10px 0;
+          height: 55px;
+          text-align: center;
+          font-size: 95%;
         }
         /*Small devices*/
         @media (min-width: 600px) {
@@ -48,6 +62,9 @@
       <div class="container">
         @yield('content')
       </div>
+      <footer>
+        <p>Designed by <a href="https://www.findmattfinnigan.com">Matt Finnigan</a></p>
+      </footer>
     </div>
     <script src="/js/app.js"></script>
   </body>

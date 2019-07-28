@@ -79,7 +79,6 @@ import Strings from '../../mixins/strings.js';
 
 export default {
   mixins: [Fetcher, Strings],
-  props: {},
   data() {
     return {
       searchText:'',

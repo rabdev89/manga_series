@@ -27,6 +27,9 @@
   .spinner-container {
     height:400px;
   }
+  .slider-section {
+    min-height: 400px;
+  }
   /*Small devices*/
   @media (min-width: 600px) {
     .home-container {
@@ -69,7 +72,15 @@
       <div v-show="loading" class="spinner-container row justify-center items-center">
         <q-spinner-cube color="indigo" size="5rem" />
       </div>
-      <carousel :autoplay="true" :autoplayTimeout="5000" class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 3],[1024, 4]]">
+      <carousel 
+        :autoplay="true" 
+        :autoplayTimeout="5000" 
+        class="carousel" 
+        :scrollPerPage="true" 
+        :perPage="1" 
+        :perPageCustom="[[768, 3],[1024, 4]]"
+        paginationActiveColor="#aeea00"
+      >
         <slide v-for="manga in randomManga" :key="'random'+manga.id" class="slide">
           <transition appear appear-active-class="fade-enter-active">
             <manga-card :manga="manga"></manga-card>
@@ -83,7 +94,7 @@
       <div v-show="loading" class="spinner-container row justify-center items-center">
         <q-spinner-cube color="indigo" size="5rem" />
       </div>
-      <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 3],[1024, 4]]">
+      <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 3],[1024, 4]]" paginationActiveColor="#aeea00">
         <slide v-for="manga in mangaByLatestChapter" :key="'latest'+manga.id" class="slide">
           <manga-card :manga="manga"></manga-card>
         </slide>
@@ -96,10 +107,11 @@
           v-model="tab"
           dense
           class="bg-theme text-white"
-          active-color="primary"
-          indicator-color="primary"
+          active-color="lime-14"
+          indicator-color="lime-14"
           align="justify"
           narrow-indicator
+          style='border-radius:0;'
         >
           <q-tab name="new" label="NEW" />
           <q-tab name="trending" label="TRENDING" />
@@ -114,7 +126,7 @@
             <div v-show="loading" class="spinner-container row justify-center items-center">
               <q-spinner-cube color="indigo" size="5rem" />
             </div>
-            <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 3],[1024, 4]]">
+            <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 3],[1024, 4]]" paginationActiveColor="#aeea00">
               <slide v-for="(manga, i) in newManga" :key="'new'+manga.id+''+i" class="slide">
                 <manga-card :manga="manga"></manga-card>
               </slide>
@@ -126,7 +138,7 @@
             <div v-show="loading" class="spinner-container row justify-center items-center">
               <q-spinner-cube color="indigo" size="5rem" />
             </div>
-            <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 3],[1024, 4]]">
+            <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 3],[1024, 4]]" paginationActiveColor="#aeea00">
               <slide v-for="manga in trendingManga" :key="'trending'+manga.id" class="slide">
                 <manga-card :manga="manga"></manga-card>
               </slide>
@@ -138,7 +150,7 @@
             <div v-show="loading" class="spinner-container row justify-center items-center">
               <q-spinner-cube color="indigo" size="5rem" />
             </div>
-            <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 3],[1024, 4]]">
+            <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 3],[1024, 4]]" paginationActiveColor="#aeea00">
               <slide v-for="(manga, i) in popularManga" :key="'popular'+manga.id+''+i" class="slide">
                 <manga-card :manga="manga"></manga-card>
               </slide>
@@ -161,7 +173,6 @@ export default {
     Slide,
     'manga-card':MangaCard,
   },
-  props: {},
   data() {
     return {
       mangaByLatestChapter: [],
@@ -170,13 +181,9 @@ export default {
       newManga:[],
       trendingManga:[],
       tab: 'new',
-      searchText: '',
       loading:false,
-      lala:[],
     }
   },
-  computed: {},
-  created() {},
   mounted() {
     this.loading = true;
     this.fetchMangaData().then(manga => {
@@ -189,14 +196,19 @@ export default {
         }
           return false;
       });
-      let randomNum = Math.floor((Math.random() * 100) + 1) - 12;
+      let self = this;
+      let randomNum = Math.floor((Math.random() * 100) + 1);
+      if(randomNum < 0) {
+        randomNum = 0;
+      }
       this.pushToArray(this.randomManga, manga.slice(randomNum, randomNum + 12));
-      this.pushToArray(this.mangaByLatestChapter, manga.sort((a, b) => { return b.last_chapter_date - a.last_chapter_date}).slice(0, 12));
+      setTimeout(() => {
+        self.pushToArray(self.mangaByLatestChapter, manga.sort((a, b) => { return b.last_chapter_date - a.last_chapter_date}).slice(0, 12));
+      }, 500);
       this.pushToArray(this.popularManga, manga.sort((a, b) => {return b.hits - a.hits;}).slice(0, 10));
       this.pushToArray(this.newManga, manga.sort((a, b) => {return b.released - a.released;}).slice(0, 10));
       let trending = manga.sort((a, b) => { return b.hits - a.hits});
       this.pushToArray(this.trendingManga, trending.filter((a) => { return a.released >= 2018;}).slice(0, 10));
-      
       this.loading = false;
     });
   },
@@ -210,7 +222,7 @@ export default {
           clearInterval(inv);
         }
       }, 100);
-    }
+    },
   }
 }
 </script>

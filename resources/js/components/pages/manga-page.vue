@@ -80,6 +80,9 @@
     h2 {
       font-size: 24px;
     }
+    .details-contain {
+      padding-left: 25px;
+    }
   }
   /*Medium devices*/
   @media (min-width: 1439px) {
@@ -94,7 +97,7 @@
 </style>
 <template>
   <div v-if="manga" class="manga-page">
-    <div class="container row q-col-gutter-lg items-center">
+    <div class="container row items-center">
       <div class="col-xs-12 col-sm-4">
         <h2><q-icon size="30px" color="red-13" name="label_important"></q-icon> {{manga.title}}</h2>
         <img :src="manga.imageURL ? manga.imageURL : 'https://cdn.mangaeden.com/mangasimg/'+manga.image" width="100%"/>

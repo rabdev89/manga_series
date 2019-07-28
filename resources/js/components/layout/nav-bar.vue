@@ -4,11 +4,15 @@
   }
   a {
     color: grey;
+    font-weight: bold;
     text-decoration: none;
   }
   .menu-items a {
     padding:0 15px;
     color:#dadada;
+  }
+  a:hover {
+    color:#aeea00;
   }
   .homelink {
     color:white;
@@ -76,16 +80,5 @@
 </template>
 
 <script>
-export default {
-  props: {},
-  data() {
-    return {
-
-    }
-  },
-  computed: {},
-  created() {},
-  mounted() {},
-  methods: {}
-}
+export default {}
 </script>

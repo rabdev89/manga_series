@@ -65,6 +65,9 @@
     border-radius:10px;
     margin-top: 15px;
   }
+  .manga-items-contain {
+    min-height: 100vh;
+  }
   .manga-wrap {
     padding: 5px;
     border: 1px solid #233a50;
@@ -121,6 +124,7 @@
         <q-icon name="label" color="red-13"></q-icon> 
          {{normalize(catSlug)}}<span v-show="catSlug !== 'Search Results'"> Manga</span>
       </h1>
+      <p v-if="catSlug == 'Search Results'">{{formatNum(mangas.length)}} results found.</p>
       <div class="btns-row row justify-end">
         <q-btn-group push>
           <q-btn push :color="viewAs == 'grid' ? 'lime-14' : ''" size="md" @click="viewAs = 'grid'" icon="grid_on" />
@@ -137,7 +141,7 @@
           >
         </q-pagination>
       </div>
-      <div v-show="loading" class="row">
+      <div v-show="loading" class="row manga-items-contain">
         <m-card-detail
           v-for="(fakeManga, i) in 10"
           :key="'fakeManga'+i"
@@ -146,7 +150,7 @@
           :class="['manga-wrap row', viewAs == 'grid' ? 'col-xs-12 col-sm-6' : 'col-12']">
         </m-card-detail>
       </div>
-      <div v-show="!loading" class="row">
+      <div v-show="!loading && mangas.length" class="row manga-items-contain">
         <!-- Manga Items -->
         <m-card-detail
           v-for="(manga, i) in mangas"
@@ -216,8 +220,6 @@ export default {
       loading:false,
       fullCatListShowing:false,
       viewAs:'grid',
-      oldData:[],
-      newData: [],
       catSlug: this.cat,
       observer: null,
       currPage:1,
@@ -255,7 +257,6 @@ export default {
           catMangas = mangas.sort((a, b) => { return b.released - a.released; });
         } else if(this.catSlug == 'Search Results') {
           catMangas = this.advancedSearch(mangas, this.params);
-          console.log(catMangas);
         } else {
           catMangas = mangas;// assume category is 'all', invalid or just has no manga, etc
           this.catSlug = 'all';
@@ -266,11 +267,25 @@ export default {
         //sort by views by default
         catMangas.sort((a, b) => { return b.hits - a.hits});
       }
-    
-      this.mangas = catMangas;
+      if(catMangas.length) {
+        this.mangas.push(catMangas[0]);
+        this.pushToArray(this.mangas, catMangas.slice(1, catMangas.length - 1));
+      }
       this.loading = false;
-
     });
+  },
+  methods: {
+    pushToArray(arr, items) {
+      let i = 0;
+      let inv = setInterval(() => {
+        arr.push(items[i]);
+        i++;
+        if(i == this.perPage) {
+          this.mangas = this.mangas.concat(items.slice(this.perPage, items.length - 1));
+          clearInterval(inv);
+        }
+      }, 100);
+    },
   },
 }
 </script>

@@ -1,12 +1,15 @@
-<style scoped>
+<style>
   .advanced-search-container {
     margin-top: 15px;
     color:white;
     font-family: 'Dosis', sans-serif;
     background-color: #0b1a2a;
     border: 3px solid #0f2133;
+    padding-bottom: 30px;
   }
-
+  .q-field__label, .q-field__messages {
+    color:white;
+  }
   h1 {
     font-weight: bold;
     text-transform: uppercase;
@@ -49,7 +52,7 @@
           color="white"
           v-model="aka"
           label="Title/Name"
-          hint="Attack on Titan/進撃の巨人"
+          hint="Attack on Titan / 進撃の巨人"
         />
         <q-input
           filled
@@ -73,6 +76,15 @@
           filled
           input-style=" background:rgb(35, 58, 80);"
           color="white"
+          v-model="categories"
+          label="Category"
+          hint="Drama / Romance / etc."
+        />
+
+        <q-input
+          filled
+          input-style=" background:rgb(35, 58, 80);"
+          color="white"
           v-model="released"
           label="Release Date"
           hint="2019, 1993"
@@ -80,7 +92,7 @@
 
         <div>
           <q-btn label="Submit" type="submit" color="positive"/>
-          <q-btn label="Reset" type="reset" color="red-14" flat class="q-ml-sm" />
+          <q-btn label="Reset" type="reset" color="red-14" class="q-ml-sm" />
         </div>
       </q-form>
     </div>
@@ -96,6 +108,7 @@ export default {
       author: '',
       artist: '',
       released: '',
+      categories: '',
     }
   },
   computed: {},
@@ -116,6 +129,9 @@ export default {
       if(this.released.length) {
         params += '/released/'+this.released;
       }
+      if(this.categories.length) {
+        params += '/categories/'+this.categories;
+      }
       if(!params.length) {
         alert('Please enter something in at least one field.');
       } else {
@@ -127,6 +143,7 @@ export default {
       this.author = '';
       this.artist = '';
       this.released = '';
+      this.categories = '';
     }
   }
 }
