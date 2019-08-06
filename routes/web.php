@@ -14,7 +14,11 @@ Route::get('/manga/{slug?}', function (Request $request) {
 });
 
 Route::get('/manga/{slug}/chapter/{chapterNo}', function (Request $request) {
-  return view('chapter_page', ['slug' => $request->slug, 'chapterNo' => $request->chapterNo]);
+  return view('chapter_page', ['slug' => $request->slug, 'chapterNo' => $request->chapterNo, 'allPages'=>false]);
+});
+
+Route::get('/manga/{slug}/chapter/{chapterNo}/all-pages', function (Request $request) {
+  return view('chapter_page', ['slug' => $request->slug, 'chapterNo' => $request->chapterNo, 'allPages'=>true]);
 });
 
 Route::get('/advanced-search', function(Request $requet) {
@@ -38,6 +42,7 @@ Route::get('/advanced-search/results/{param1?}/{val1?}/{param2?}/{val2?}/{param3
   if(isset($request->param5)) {
     $params->push([$request->param5 => $request->val5]);
   }
-  return view('categories', 
+  return view('categories',
   ['slug' => 'Search Results', 'params' => $params]);
 });
+

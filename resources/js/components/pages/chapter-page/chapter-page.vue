@@ -69,9 +69,9 @@
       <q-toolbar class="text-white tool-bar row q-my-md shadow-2">
         <q-select
           class="col-xs-12 col-md-4 chapter-select"
-          outlined 
-          v-model="chapter" 
-          :options="manga.chapters" 
+          outlined
+          v-model="chapter"
+          :options="manga.chapters"
           option-label="title"
           option-value="id"
           color="text-white"
@@ -98,9 +98,9 @@
       <q-toolbar class="text-white tool-bar bottom-tool-bar row q-my-md shadow-2">
         <q-select
           class="col-xs-12 col-md-4 chapter-select"
-          outlined 
-          v-model="chapter" 
-          :options="manga.chapters" 
+          outlined
+          v-model="chapter"
+          :options="manga.chapters"
           option-label="title"
           option-value="id"
           color="text-white"
@@ -138,7 +138,8 @@ export default {
   },
   props: {
     slug: {},
-    initChapterNo:{}
+    initChapterNo:{},
+    allPages:{}
   },
   data() {
     return {
@@ -146,7 +147,7 @@ export default {
       chapter: null,
       index:null,
       loading:false,
-      showAllPages: false,
+      showAllPages: true,
       isPrevPage:false,
       isNextPage:true,
     }
