@@ -46,10 +46,6 @@
   }
   /*Medium devices*/
   @media (min-width: 1439px) {
-    .chapter-page {
-      margin:0 auto;
-      width: 1170px;
-    }
     .tool-bar>* {
       margin:0px;
       padding:0px 5px;

@@ -12,7 +12,6 @@
     position: absolute;
     z-index: 1;
     width: 90%;
-    margin-top: -20px;
     max-height: 50vh;
     overflow-y: scroll;
   }
@@ -38,7 +37,12 @@
     width:50px;
     height:auto;
   }
-
+  .input {
+    background: #233a50;
+    padding-right: 11px;
+    border: 4px solid #020d18;
+    padding: 0px 15px;
+  }
   /*Small devices*/
   @media (min-width: 600px) {
     .search-container {
@@ -55,9 +59,9 @@
 </style>
 <template>
   <div class="search-container">
-    <q-input input-style="background-color:#233a50;color:white;" color="white" bottom-slots v-model="searchText" label="Search" counter maxlength="100">
+    <q-input class="input" color="white" input-style="color:white;" v-model="searchText" label="Search">
       <template v-slot:append>
-        <q-icon name="search" color="white"/>
+        <q-icon name="search" size="35px" color="white"/>
       </template>
     </q-input>
     <q-list v-show="results.length" class="results-container" bordered>

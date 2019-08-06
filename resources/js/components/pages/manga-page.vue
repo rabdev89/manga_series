@@ -86,10 +86,7 @@
   }
   /*Medium devices*/
   @media (min-width: 1439px) {
-    .manga-page {
-      margin:0 auto;
-      width: 1170px;
-    }
+    
   }
   /*Large devices*/
   @media (min-width: 1919px) {
@@ -182,13 +179,13 @@
           <q-item v-for="(chapter, i) in manga.chapters" :key="'chapter'+chapter[3]" class="chapter-item" :style="i == 0 ? 'border-top:none' : ''">
             <q-item-section>
               <a :href="'/manga/'+toSlug(manga.title)+'/chapter/'+chapter[0]">
-                <q-item-label v-if="chapter[0] != chapter[2]">
+                <q-item-label v-if="chapter[0] != chapter[2] && chapter[2] && chapter[2].length">
                   <q-icon color="primary" name="book"></q-icon>
-                  #{{chapter[0]}} {{chapter[2]}}
+                  # {{chapter[0]}} {{chapter[2]}}
                 </q-item-label>
                 <q-item-label v-else>
                   <q-icon color="primary" name="book"></q-icon>
-                  Chapter #{{chapter[0]}}
+                  Chapter # {{chapter[0]}}
                 </q-item-label>
               </a>
             </q-item-section>

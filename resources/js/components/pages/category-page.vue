@@ -93,17 +93,9 @@
   }
   /*Small devices*/
   @media (min-width: 600px) {
-    .category-container {
-      padding-left: 15px;
-      padding-right: 15px;
-    }
   }
   /*Medium devices*/
   @media (min-width: 1439px) {
-    .category-container {
-      margin:0 auto;
-      width: 1170px;
-    }
   }
   /*Large devices*/
   @media (min-width: 1919px) {
@@ -253,8 +245,10 @@ export default {
         if(this.catSlug == 'hot') {
           catMangas = mangas.sort((a, b) => { return b.hits - a.hits});
           catMangas = catMangas.filter((a) => { return a.released >= 2018;});
-        } else if(this.catSlug == 'latest') {
+        } else if(this.catSlug == 'new') {
           catMangas = mangas.sort((a, b) => { return b.released - a.released; });
+        } else if(this.catSlug == 'latest') {
+          catMangas = mangas.sort((a, b) => { return b.last_chapter_date - a.last_chapter_date;});
         } else if(this.catSlug == 'Search Results') {
           catMangas = this.advancedSearch(mangas, this.params);
         } else {
