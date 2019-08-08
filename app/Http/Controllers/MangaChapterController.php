@@ -28,4 +28,30 @@ class MangaChapterController extends Controller
 
         return $file;
     }
+
+    public function getLatest()
+    {
+        $url = 'https://www.mangaeden.com/api/list/0/';
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+        $data = curl_exec($ch);
+        curl_close($ch);
+
+        return $data;
+    }
+
+    public function getBySlug(Request $request, $slug)
+    {
+       return view('manga_page', ['slug' => $request->slug]);
+    }
+
+    public function getAllPages(Request $request)
+    {
+        return view('chapter_page', ['slug' => $request->slug, 'chapterNo' => $request->chapterNo, 'allPages'=>true]);
+    }
+
 }
