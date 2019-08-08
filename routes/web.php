@@ -2,7 +2,9 @@
 use Illuminate\Http\Request;
 
 
+Route::get('/', 'HomeController@index');
 Route::get('/manga/categories/{catSlug?}', 'CategoriesController@getCategoryBySlug');
+Route::get('/manga/{slug?}', 'MangaChapterController@getBySlug');
 Route::get('/manga/{slug?}', 'MangaChapterController@getBySlug');
 Route::get('/manga/{slug}/chapter/{chapterNo}', 'MangaChapterController@getAllPages');
 Route::get('/manga/{slug}/chapter/{chapterNo}/all-pages', 'MangaChapterController@getAllPages');
