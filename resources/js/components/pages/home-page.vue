@@ -39,6 +39,7 @@
     overflow: hidden;
   }
 
+
   /*Small devices*/
   @media (min-width: 600px) {
     h2 {
@@ -58,6 +59,7 @@
     opacity: 0;
   }
 
+
   @keyframes go {
     from {
       opacity: 0;
@@ -71,16 +73,15 @@
   <div class="home-container">
     <!-- Random -->
     <div class="slider-section">
-      <h2>Random Manga</h2>
       <div v-show="loading" class="spinner-container row justify-center items-center">
         <q-spinner-cube color="indigo" size="5rem" />
       </div>
-      <carousel 
-        :autoplay="true" 
-        :autoplayTimeout="5000" 
-        class="carousel" 
-        :scrollPerPage="true" 
-        :perPage="1" 
+      <carousel
+        :autoplay="false"
+        :autoplayTimeout="5000"
+        class="carousel"
+        :scrollPerPage="true"
+        :perPage="1"
         :perPageCustom="[[768, 3],[1024, 4]]"
         paginationActiveColor="#aeea00"
       >
@@ -92,90 +93,84 @@
       </carousel>
     </div>
     <!-- Latest -->
-    <div class="latest-section">
-      <h2 class="row justify-between">Latest Releases <a style="font-size:65%;color:#dcf836;" href="/manga/categories/latest">See All</a></h2>
-      <div v-show="loading" class="spinner-container row justify-center items-center">
-        <q-spinner-cube color="indigo" size="5rem" />
+    <div class="row">
+      <div class="latest-section col-xs-12 col-md-8">
+        <h2 class="row justify-between">Latest Releases <a style="font-size:65%;color:#dcf836;" href="/manga/categories/latest">See All</a></h2>
+        <div v-show="loading" class="spinner-container row justify-center items-center">
+          <q-spinner-cube color="indigo" size="5rem" />
+        </div>
+        <div v-show="!loading" class="mangas-container row">
+          <m-card-detail
+            v-for="manga in mangaByLatestChapter"
+            :key="'catmanga'+manga.id"
+            :manga="manga"
+            view-as="grid"
+            class="manga-wrap col-xs-12 col-sm-6 col-md-12">
+          </m-card-detail>
+        </div>
       </div>
-      <div v-show="!loading" class="mangas-container row">
-        <m-card-detail
-          v-for="manga in mangaByLatestChapter"
-          :key="'catmanga'+manga.id"
-          :manga="manga"
-          view-as="grid"
-          class="manga-wrap row col-xs-12 col-sm-6 col-md-4">
-        </m-card-detail>
+
+      <div class="slider-section col-xs-12 col-md-4">
+        <div style="display:none">
+        <h2>Browse Manga</h2>
+        <q-card>
+          <q-tabs
+            v-model="tab"
+            dense
+            class="bg-theme text-white"
+            active-color="lime-14"
+            indicator-color="lime-14"
+            align="justify"
+            narrow-indicator
+            style='border-radius:0;'
+          >
+            <q-tab name="new" label="NEW" />
+            <q-tab name="trending" label="TRENDING" />
+            <q-tab name="popular" label="POPULAR" />
+          </q-tabs>
+
+          <q-separator />
+
+          <q-tab-panels v-model="tab" animated class="bg-contrast">
+            <q-tab-panel name="new">
+              <div class="text-h6">NEW MANGA</div>
+              <div v-show="loading" class="spinner-container row justify-center items-center">
+                <q-spinner-cube color="indigo" size="5rem" />
+              </div>
+              <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 4],[1024, 5]]" paginationActiveColor="#aeea00">
+                <slide v-for="(manga, i) in newManga" :key="'new'+manga.id+''+i" class="slide">
+                  <manga-card :manga="manga" style="height: 250px;"></manga-card>
+                </slide>
+              </carousel>
+            </q-tab-panel>
+
+            <q-tab-panel name="trending">
+              <div class="text-h6">TRENDING MANGA</div>
+              <div v-show="loading" class="spinner-container row justify-center items-center">
+                <q-spinner-cube color="indigo" size="5rem" />
+              </div>
+              <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 4],[1024, 5]]" paginationActiveColor="#aeea00">
+                <slide v-for="manga in trendingManga" :key="'trending'+manga.id" class="slide">
+                  <manga-card :manga="manga" style="height: 250px;"></manga-card>
+                </slide>
+              </carousel>
+            </q-tab-panel>
+
+            <q-tab-panel name="popular">
+              <div class="text-h6">MOST POPULAR</div>
+              <div v-show="loading" class="spinner-container row justify-center items-center">
+                <q-spinner-cube color="indigo" size="5rem" />
+              </div>
+              <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 4],[1024, 5]]" paginationActiveColor="#aeea00">
+                <slide v-for="(manga, i) in popularManga" :key="'popular'+manga.id+''+i" class="slide">
+                  <manga-card :manga="manga" style="height: 250px;"></manga-card>
+                </slide>
+              </carousel>
+            </q-tab-panel>
+          </q-tab-panels>
+        </q-card>
+        </div>
       </div>
-    </div>
-    <!-- <div class="slider-section">
-      <h2>Latest Updates</h2>
-      <div v-show="loading" class="spinner-container row justify-center items-center">
-        <q-spinner-cube color="indigo" size="5rem" />
-      </div>
-      <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 3],[1024, 4]]" paginationActiveColor="#aeea00">
-        <slide v-for="manga in mangaByLatestChapter" :key="'latest'+manga.id" class="slide">
-          <manga-card :manga="manga"></manga-card>
-        </slide>
-      </carousel>
-    </div> -->
-    <div class="slider-section">
-      <h2>Browse Manga</h2>
-      <q-card>
-        <q-tabs
-          v-model="tab"
-          dense
-          class="bg-theme text-white"
-          active-color="lime-14"
-          indicator-color="lime-14"
-          align="justify"
-          narrow-indicator
-          style='border-radius:0;'
-        >
-          <q-tab name="new" label="NEW" />
-          <q-tab name="trending" label="TRENDING" />
-          <q-tab name="popular" label="POPULAR" />
-        </q-tabs>
-
-        <q-separator />
-
-        <q-tab-panels v-model="tab" animated class="bg-contrast">
-          <q-tab-panel name="new">
-            <div class="text-h6">NEW MANGA</div>
-            <div v-show="loading" class="spinner-container row justify-center items-center">
-              <q-spinner-cube color="indigo" size="5rem" />
-            </div>
-            <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 4],[1024, 5]]" paginationActiveColor="#aeea00">
-              <slide v-for="(manga, i) in newManga" :key="'new'+manga.id+''+i" class="slide">
-                <manga-card :manga="manga" style="height: 250px;"></manga-card>
-              </slide>
-            </carousel>
-          </q-tab-panel>
-
-          <q-tab-panel name="trending">
-            <div class="text-h6">TRENDING MANGA</div>
-            <div v-show="loading" class="spinner-container row justify-center items-center">
-              <q-spinner-cube color="indigo" size="5rem" />
-            </div>
-            <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 4],[1024, 5]]" paginationActiveColor="#aeea00">
-              <slide v-for="manga in trendingManga" :key="'trending'+manga.id" class="slide">
-                <manga-card :manga="manga" style="height: 250px;"></manga-card>
-              </slide>
-            </carousel>
-          </q-tab-panel>
-
-          <q-tab-panel name="popular">
-            <div class="text-h6">MOST POPULAR</div>
-            <div v-show="loading" class="spinner-container row justify-center items-center">
-              <q-spinner-cube color="indigo" size="5rem" />
-            </div>
-            <carousel class="carousel" :scrollPerPage="true" :perPage="1" :perPageCustom="[[768, 4],[1024, 5]]" paginationActiveColor="#aeea00">
-              <slide v-for="(manga, i) in popularManga" :key="'popular'+manga.id+''+i" class="slide">
-                <manga-card :manga="manga" style="height: 250px;"></manga-card>
-              </slide>
-            </carousel>
-          </q-tab-panel>
-        </q-tab-panels>
-      </q-card>
     </div>
   </div>
 </template>
@@ -247,3 +242,4 @@ export default {
   }
 }
 </script>
+

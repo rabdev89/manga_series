@@ -22,18 +22,17 @@
   }
   .content {
     color: white;
-    padding: 15px;
+    padding: 15px 0 0 0;
     width: 85%;
     margin: 0 auto;
   }
   .category span {
     padding: 5px;
     background: rgb(35, 58, 80);
-    margin: 5px;
     display: inline-block;
     border-radius: 5px;
     font-family: 'Dosis', sans-serif;
-    font-size: 12px;
+    font-size: 8px;
     color: #ffffff;
     font-weight: 700;
     text-transform: uppercase;
@@ -53,6 +52,8 @@
   .hovering {
     color:#dcf836;
   }
+
+
   /*Small devices*/
   @media (min-width: 600px) {
     .manga-card {
@@ -76,9 +77,9 @@
     <div class="overlay column justify-end">
       <a :href="'/manga/'+toSlug(manga.title)">
         <div class="content">
-          <h5 :class="['title', hovering ? 'hovering' : '']">{{manga.title}}</h5>
+          <h7 :class="['title', hovering ? 'hovering' : '']" >{{manga.title}}</h7>
           <p class="category" v-if="manga.categories.length"><span :class="toSlug(manga.categories[0])">{{manga.categories[0]}}</span></p>
-          <p class="chapterDate">Updated: {{formatDate(manga.last_chapter_date)}}</p>
+
         </div>
       </a>
     </div>

@@ -50,7 +50,8 @@
   h1 {
     font-weight: bold;
     text-transform: uppercase;
-    font-size:25px;
+    font-size: 12px;
+    line-height: 18px;
   }
   h5 {
     margin: 30px;
@@ -112,34 +113,26 @@
     </div>
     <!-- Manga of Category -->
     <div class="mangas-container col-xs-12 col-md-8">
-      <h1>
-        <q-icon name="label" color="red-13"></q-icon> 
-         {{normalize(catSlug)}}<span v-show="catSlug !== 'Search Results'"> Manga</span>
-      </h1>
+
       <p v-if="catSlug == 'Search Results'">{{formatNum(mangas.length)}} results found.</p>
       <div class="btns-row row justify-end">
+        <h1>
+          <q-icon name="label" color="red-13"></q-icon>
+          {{normalize(catSlug)}}<span v-show="catSlug !== 'Search Results'"> Manga</span>
+        </h1>
         <q-btn-group push>
           <q-btn push :color="viewAs == 'grid' ? 'lime-14' : ''" size="md" @click="viewAs = 'grid'" icon="grid_on" />
           <q-btn push :color="viewAs == 'list' ? 'lime-14' : ''" size="md" @click="viewAs = 'list'" icon="view_list" />
         </q-btn-group>
       </div>
-      <div class="row justify-center">
-        <q-pagination
-          v-model="currPage"
-          color="teal"
-          :max="parseInt((mangas.length / perPage).toFixed(0))"
-          :max-pages="4"
-          :direction-links="true"
-          >
-        </q-pagination>
-      </div>
+
       <div v-show="loading" class="row manga-items-contain">
         <m-card-detail
           v-for="(fakeManga, i) in 10"
           :key="'fakeManga'+i"
           :manga="null"
           :view-as="viewAs"
-          :class="['manga-wrap row', viewAs == 'grid' ? 'col-xs-12 col-sm-6' : 'col-12']">
+          :class="['manga-wrap row', viewAs == 'grid' ? 'col-xs-12 col-sm-12' : 'col-12']">
         </m-card-detail>
       </div>
       <div v-show="!loading && mangas.length" class="row manga-items-contain">
@@ -150,7 +143,7 @@
           :key="'catmanga'+manga.id"
           :manga="manga"
           :view-as="viewAs"
-          :class="['manga-wrap row', viewAs == 'grid' ? 'col-xs-12 col-sm-6' : 'col-12']">
+          :class="['manga-wrap row', viewAs == 'grid' ? 'col-xs-12 col-sm-12' : 'col-12']">
         </m-card-detail>
       </div>
       <div v-show="!loading && !mangas.length" class="no-results">
@@ -178,7 +171,7 @@
         <q-list bordered separator class="row">
           <a  class="col-xs-6" :href="'/manga/categories/'+cat.slug" v-for="cat in categories" :key="cat.slug+'link'">
             <q-item class="items-center" clickable v-ripple>
-              <q-icon name="arrow_right" color="red-13"></q-icon> 
+              <q-icon name="arrow_right" color="red-13"></q-icon>
             <q-item-section>{{cat.name}}</q-item-section>
             </q-item>
           </a>
@@ -223,7 +216,7 @@ export default {
     this.loading = true;
     let seenCats = [];
     let catMangas = [];
-    
+
     this.fetchMangaData().then(mangas => {
       mangas.forEach((manga) => {
         //extract categories
