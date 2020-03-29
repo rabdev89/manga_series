@@ -30,7 +30,7 @@
         a {
           text-decoration: inherit;
           color:inherit;
-        } 
+        }
         a:hover, footer a {
           text-decoration: underline;
           color:#dcf836;
@@ -47,7 +47,7 @@
           text-align: center;
           font-size: 95%;
         }
-        
+
         /*Small devices*/
         @media (min-width: 600px) {
           #app {
@@ -78,11 +78,10 @@
     <div id="app">
       <div class="container">
         <nav-bar></nav-bar>
-        <search-bar></search-bar>
         @yield('content')
       </div>
       <footer>
-        <p>Designed by <a href="https://www.findmattfinnigan.com">Matt Finnigan</a></p>
+        <p>Copyrights and trademarks for the manga, and other promotional materials are held by their respective owners and their use is allowed under the fair use clause of the Copyright Law.</p>
       </footer>
     </div>
     <script src="/js/app.js"></script>
