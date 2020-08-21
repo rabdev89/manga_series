@@ -64,15 +64,14 @@
             "php artisan optimize",
             "chmod -R 755 bootstrap\/cache",
             "php artisan clear-compiled",
-            "chmod -R 777 public/"
+            "chmod -R 777 public/",
+            "php artisan route:clear",
+            "php artisan config:clear",
+            "php artisan cache:clear"
         ],
         "post-update-cmd": [
            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
            "@php artisan optimize"
-        ],
-        "post-autoload-dump": [
-           "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-           "@php artisan package:discover"
-       ]
+        ]
     }
 }
